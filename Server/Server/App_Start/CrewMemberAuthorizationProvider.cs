@@ -37,10 +37,16 @@ namespace Server.App_Start
 
                 if (_loginCrewMember.Password == _passwordValidator.Password)
                 {
-                    var identity = new ClaimsIdentity(context.Options.AuthenticationType);
-                    identity.AddClaim(new Claim(ClaimTypes.Name, _loginCrewMember.Id.ToString()));
-                    identity.AddClaim(new Claim(ClaimTypes.Role, "crewmember"));
-                    context.Validated(identity);
+                    if (_loginCrewMember.ConfirmAccountId == null)
+                    {
+                        var identity = new ClaimsIdentity(context.Options.AuthenticationType);
+                        identity.AddClaim(new Claim(ClaimTypes.Name, _loginCrewMember.Id.ToString()));
+                        identity.AddClaim(new Claim(ClaimTypes.Role, "crewmember"));
+                        context.Validated(identity);
+                    }
+                    else {
+                        throw new Exception();
+                    }
                 }
                 else {
                     throw new Exception();

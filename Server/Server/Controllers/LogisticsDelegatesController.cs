@@ -7,6 +7,8 @@ using System.Web.Http;
 
 namespace Server.Controllers
 {
+    [Authorize]
+    [RoutePrefix("api/logisticsdelegates")]
     public class LogisticsDelegatesController : ApiController
     {
         // GET api/logisticsdelegates
@@ -22,18 +24,55 @@ namespace Server.Controllers
         }
 
         // POST api/logisticsdelegates
-        public void Post([FromBody]string value)
+        [AllowAnonymous]
+        [HttpPost]
+        [Route("")]
+        public void Post([FromBody]Models.LogisticsDelegate value)
         {
+            Logics.LogisticsDelegateLogic _logic = new Logics.LogisticsDelegateLogic();
+            _logic.AddLogisticDelegate(value);
         }
 
         // PUT api/logisticsdelegates/5
-        public void Put(int id, [FromBody]string value)
+        [Authorize(Roles = "logisticsdelegate")]
+        [HttpPut]
+        [Route("")]
+        public void Put([FromBody]Models.LogisticsDelegate value)
         {
+            int Id = int.Parse(RequestContext.Principal.Identity.Name);
+            Logics.LogisticsDelegateLogic _logic = new Logics.LogisticsDelegateLogic();
+            _logic.UpdateLogisticDelegate(Id,value);
+
         }
 
-        // DELETE api/logisticsdelegates/5
-        public void Delete(int id)
+        // GET api/logisticsdelegates/confirm/
+        [AllowAnonymous]
+        [Route("confirm/{ConfirmationId}")]
+        [HttpGet]
+        public void Confirm([FromUri] String ConfirmationId)
         {
+            Logics.LogisticsDelegateLogic _logic = new Logics.LogisticsDelegateLogic();
+            _logic.ConfirmLogisticDelegateAccount(ConfirmationId);
+        }
+
+        // GET api/logisticsdelegates/resetpassword/aniolog@gmail.com
+        [AllowAnonymous]
+        [Route("resetpassword/{Email}")]
+        [HttpGet]
+        public void RequestResetPassword([FromUri] String Email)
+        {
+            Logics.LogisticsDelegateLogic _logic = new Logics.LogisticsDelegateLogic();
+            _logic.RequestResetPassword(Email);
+        }
+
+        // POST api/logisticsdelegates/resetPassword/
+        [AllowAnonymous]
+        [Route("resetPassword/{ResetId}")]
+        [HttpPost]
+        public void ResetPassword([FromBody] Models.LogisticsDelegate ResetDelegate, [FromUri] String ResetId)
+        {
+            Logics.LogisticsDelegateLogic _logic = new Logics.LogisticsDelegateLogic();
+            _logic.ResetPassword(ResetDelegate,ResetId);
         }
     }
 }

@@ -108,7 +108,7 @@ namespace Server.Persistences
         /// <summary>
         /// This method saves or updates the given crew member
         /// </summary>
-        /// <param name="NewCrewMember"></param>
+        /// <param name="CrewMember"></param>
         /// <returns>the crew member after being saved or updated</returns>
         public Models.CrewMember AddOrUpdateCrewMember(Models.CrewMember CrewMember) {
             if (CrewMember.Id == 0)
@@ -148,6 +148,10 @@ namespace Server.Persistences
             return CurrentContext.CrewMembers.Find(CrewMemberId);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="CrewMembers"></param>
         public void DeleteCrewMember(IQueryable<Models.CrewMember> CrewMembers) {
             foreach (Models.CrewMember _deletedCrewMember in CrewMembers) {
                 CurrentContext.CrewMembers.Remove(_deletedCrewMember);
