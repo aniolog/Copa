@@ -8,7 +8,7 @@ using System.Web;
 
 namespace Server.App_Start
 {
-    public class AuthorizationProvider : OAuthAuthorizationServerProvider
+    public class LogisticsAuthorizationProvider : OAuthAuthorizationServerProvider
     {
 
         public override async Task ValidateClientAuthentication(OAuthValidateClientAuthenticationContext context)

@@ -19,11 +19,6 @@ namespace Server
                 routeTemplate: "api/{controller}/{id}",
                 defaults: new { id = RouteParameter.Optional }
             );
-
-            
-            //WebSockets.Server ProviderServer = new WebSockets.Server(false);
-            Models.Model.DataBase.GetInstance();
-            
         }
     }
 }

@@ -158,10 +158,21 @@
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="App_Start\AuthorizationProvider.cs" />
+    <Compile Include="App_Start\LogisticsAuthorizationProvider.cs" />
+    <Compile Include="App_Start\CrewMemberAuthorizationProvider.cs" />
     <Compile Include="App_Start\Startup.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
+    <Compile Include="Controllers\BillsController.cs" />
+    <Compile Include="Controllers\CrewMembersController.cs" />
+    <Compile Include="Controllers\CurrenciesController.cs" />
+    <Compile Include="Controllers\DevicesController.cs" />
+    <Compile Include="Controllers\LogisticsDelegatesController.cs" />
     <Compile Include="Controllers\PlacesController.cs" />
+    <Compile Include="Controllers\ProvidersController.cs" />
+    <Compile Include="Controllers\RatesController.cs" />
+    <Compile Include="Controllers\RequestsController.cs" />
+    <Compile Include="Controllers\TeamMembersController.cs" />
+    <Compile Include="Controllers\VehiclesController.cs" />
     <Compile Include="Exceptions\InvalidEmailException.cs" />
     <Compile Include="Exceptions\InvalidPasswordException.cs" />
     <Compile Include="Exceptions\RestorePasswordRequstHasExpiredException.cs" />
@@ -177,6 +188,7 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Logics\CrewMemberLogic.cs" />
     <Compile Include="Models\Bill.cs" />
     <Compile Include="Models\ModelResources.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -196,6 +208,7 @@
     <Compile Include="Models\TeamMember.cs" />
     <Compile Include="Models\User.cs" />
     <Compile Include="Models\Vehicle.cs" />
+    <Compile Include="Persistences\CrewMemberPersistence.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Pushs\GCM\GCMPush.cs" />
     <Compile Include="Pushs\GCM\GCMResources.Designer.cs">
@@ -207,6 +220,7 @@
     <Compile Include="Pushs\Push.cs" />
     <Compile Include="Pushs\PushFactory.cs" />
     <Compile Include="Rests\RestRequest.cs" />
+    <Compile Include="Threads\UserConfirmationThread.cs" />
     <Compile Include="WebSockets\List\LogisticsWebSocketList.cs" />
     <Compile Include="WebSockets\List\ProviderWebSocketList.cs" />
     <Compile Include="WebSockets\Sockets\LogisticsWebSocket.cs" />
@@ -223,9 +237,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Logics\" />
-    <Folder Include="Persistences\" />
-    <Folder Include="Threads\" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Filters\FilterResources.resx">

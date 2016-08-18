@@ -17,12 +17,14 @@ namespace Server.Models
         /// 
         /// </summary>
         [Required] 
+        [MinLength(1)]
         public string Name { set; get; }
 
         /// <summary>
         /// 
         /// </summary>
-        [Required] 
+        [Required]
+        [MinLength(1)]
         public string LastName { set; get; }
 
         /// <summary>
@@ -46,7 +48,7 @@ namespace Server.Models
         public ICollection<Place> Places { get; set; }
 
 
-        public CrewMember():base()
+        public CrewMember()
         {
             this.TeamMembers = new HashSet<TeamMember>();
             this.Devices = new HashSet<Device>();

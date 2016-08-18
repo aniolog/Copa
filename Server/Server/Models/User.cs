@@ -13,18 +13,29 @@ namespace Server.Models
 {
     public  class User
     {
+        private String UserMail{set;get;}
 
+        private String UserPassword { set; get; }
+
+        private DateTime? UserResetPasswordLimit { set; get; }
+
+        private DateTime? UserConfirmationLimit { set; get; }
+
+        private String UserResetPasswordId { set; get; }
+
+        private String UserConfirmAccountId { set; get; }
+        
 
         /// <summary>
         /// The regular expresion checks if the Email is in a valid format
         /// </summary>
         [Required]
-        public String UserEmail { 
+        public String Email { 
             set {
                 Regex _Regex = new Regex(@"^([\w\.\-]+)@([\w\-]+)((\.(\w){2,3})+)$");
                 if (_Regex.Match(value).Success)
                 {
-                    UserEmail = value;
+                    this.UserMail = value;
                 }
                 else
                 {
@@ -32,8 +43,8 @@ namespace Server.Models
                 }
         
             }
-            get { 
-                return UserEmail;
+            get {
+                return this.UserMail;
             }
         }
 
@@ -49,20 +60,10 @@ namespace Server.Models
         [Required]
         public String Password { 
             set {
-                Regex _Regex = new Regex(@"(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$");
-                if (_Regex.Match(value).Success) {
-                    Password = EncryptPassword(value);
-                    this.ConfirmAccountId = null;
-                }
-                else
-                {
-                    throw new Exceptions.InvalidPasswordException();
-                }
-                
-           
+                this.UserPassword = value;
             }
 
-            get { return Password; }
+            get { return this.UserPassword; }
         }
 
         /// <summary>
@@ -74,10 +75,14 @@ namespace Server.Models
                 
                 if (value != null)
                 {
-                    ResetPasswordLimit = DateTime.Now.AddDays(1);
+                    this.UserResetPasswordLimit = DateTime.Now.AddDays(1);
+                }
+                else
+                {
+                    this.UserResetPasswordLimit = null;
                 }
             }
-            get{return ResetPasswordLimit;}
+            get { return this.UserResetPasswordLimit; }
          }
 
         /// <summary>
@@ -85,13 +90,17 @@ namespace Server.Models
         /// </summary>
         public DateTime? ConfirmationLimit{
             set{
-                
-                if (value != null) {
-                
-                    ConfirmationLimit = DateTime.Now.AddDays(1);
+
+                if (value != null)
+                {
+
+                    this.UserConfirmationLimit = DateTime.Now.AddDays(1);
+                }
+                else {
+                    this.UserConfirmationLimit = null;
                 }
             }
-            get { return ConfirmationLimit; }
+            get { return this.UserConfirmationLimit; }
         }
 
         /// <summary>
@@ -104,56 +113,67 @@ namespace Server.Models
 
                 if (value == null)
                 {
-                    this.ResetPasswordId = null;
+                    this.UserResetPasswordId = null;
                 }
                 else
                 {
-                    this.ResetPasswordId = System.Guid.NewGuid().ToString();
+                    this.UserResetPasswordId = System.Guid.NewGuid().ToString();
                 }
             }
-            get { return ResetPasswordId; }
+            get { return this.UserResetPasswordId; }
          }
 
         /// <summary>
-        /// Sets the uid for the user's account confirmation
+        /// This attribute represents the code for the user to confirm his account
         /// </summary>
-        public String ConfirmAccountId
-        {
-            set
-            {
-
-                if (value == null)
+        public String ConfirmAccountId {
+            set {
+                if (value != null)
                 {
-                    this.ConfirmAccountId = null;
+                    this.UserConfirmAccountId = System.Guid.NewGuid().ToString();
                 }
                 else
                 {
-                    this.ConfirmAccountId = System.Guid.NewGuid().ToString();
+                    this.UserConfirmAccountId = null;
                 }
             }
-            get { return ResetPasswordId; }
+            get {
+                return this.UserConfirmAccountId;
+            }
         }
 
         /// <summary>
-        /// Class constructor which sets the confirmation UId
+        /// 
         /// </summary>
         public User()
         {
             this.ConfirmAccountId = "";
+            this.ConfirmationLimit = DateTime.Now;
         }
+
 
         /// <summary>
         /// Encrypts a Password string using Sha 256 algorithm
         /// </summary>
         /// <param name="Password"></param>
         /// <returns></returns>
-        public static String EncryptPassword(String Password) {
-            HashAlgorithm _hash = new SHA256Managed();
-            byte[] _plainTextBytes =
-                System.Text.Encoding.UTF8.GetBytes(Password);
-            byte[] hashBytes =
-                _hash.ComputeHash(_plainTextBytes);
-            return Convert.ToBase64String(hashBytes);
+        public void CheckAndEncryptPassword() {
+
+            Regex _Regex = new Regex(@"(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$");
+            if (_Regex.Match(this.Password).Success)
+            {
+                HashAlgorithm _hash = new SHA256Managed();
+                byte[] _plainTextBytes =
+                    System.Text.Encoding.UTF8.GetBytes(this.Password);
+                byte[] hashBytes =
+                    _hash.ComputeHash(_plainTextBytes);
+                this.UserPassword=Convert.ToBase64String(hashBytes);
+            }
+            else
+            {
+                throw new Exceptions.InvalidPasswordException();
+            }
+            
        }
 
         /// <summary>
@@ -161,6 +181,7 @@ namespace Server.Models
         /// </summary>
         public void SendConfirmationEmail()
         {
+            
             String _confirmAccountBody = 
                 String.Format(ModelResources.ConfirmationAccountBody,this.ConfirmAccountId);
             this.SendEmail(ModelResources.ConfirmationAccountSubject,_confirmAccountBody);
@@ -212,10 +233,10 @@ namespace Server.Models
                 ModelResources.Password);
             _smtpServer.EnableSsl = true;
             _mail.From = new MailAddress("enfermeriacsap@gmail.com");
-            _mail.To.Add(this.UserEmail);
+            _mail.To.Add(this.UserMail);
             _mail.Subject = Subject;
             _mail.IsBodyHtml = true;
-            _mail.Body = "";
+            _mail.Body = Body;
             _smtpServer.Send(_mail);
          
         }

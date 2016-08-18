@@ -31,15 +31,37 @@ namespace Server.App_Start
             OAuthAuthorizationServerOptions OAuthServerOptions = new OAuthAuthorizationServerOptions()
             {
                 AllowInsecureHttp = true,
-                TokenEndpointPath = new PathString("/api/token"),
+                TokenEndpointPath = new PathString("/api/token/crewmember"),
                 AccessTokenExpireTimeSpan = TimeSpan.FromDays(365),
-                Provider = new AuthorizationProvider()
+                Provider = new CrewMemberAuthorization()
             };
             app.UseOAuthAuthorizationServer(OAuthServerOptions);
             app.UseOAuthBearerAuthentication(new OAuthBearerAuthenticationOptions());
 
+            /*
+            OAuthAuthorizationServerOptions _OAuthServerOptions = new OAuthAuthorizationServerOptions()
+            {
+                AllowInsecureHttp = true,
+                TokenEndpointPath = new PathString("/api/tok"),
+                AccessTokenExpireTimeSpan = TimeSpan.FromDays(365),
+                Provider = new CrewMemberAuthorizationProvider()
+            };
+            app.UseOAuthAuthorizationServer(_OAuthServerOptions);
+            app.UseOAuthBearerAuthentication(new OAuthBearerAuthenticationOptions());
+            */
+
+
+
+
+
+
+
+
+
+
             app.MapWebSocketPattern<WebSockets.Sockets.ProviderWebSocket>("/provider/(?<Id>.+)");
             app.MapWebSocketPattern<WebSockets.Sockets.LogisticsWebSocket>("/logistics/(?<Id>.+)");
+            Threads.UserConfirmationThread _thread = new Threads.UserConfirmationThread();
 
         }
 
