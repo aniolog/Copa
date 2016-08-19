@@ -38,24 +38,17 @@ namespace Server.App_Start
             app.UseOAuthAuthorizationServer(OAuthServerOptions);
             app.UseOAuthBearerAuthentication(new OAuthBearerAuthenticationOptions());
 
-            /*
-            OAuthAuthorizationServerOptions _OAuthServerOptions = new OAuthAuthorizationServerOptions()
+            
+            OAuthAuthorizationServerOptions _logisticsOAuthServerOptions = new OAuthAuthorizationServerOptions()
             {
                 AllowInsecureHttp = true,
-                TokenEndpointPath = new PathString("/api/tok"),
+                TokenEndpointPath = new PathString("/api/token/logisticdelegate"),
                 AccessTokenExpireTimeSpan = TimeSpan.FromDays(365),
-                Provider = new CrewMemberAuthorizationProvider()
+                Provider = new LogisticsAuthorizationProvider()
             };
-            app.UseOAuthAuthorizationServer(_OAuthServerOptions);
+            app.UseOAuthAuthorizationServer(_logisticsOAuthServerOptions);
             app.UseOAuthBearerAuthentication(new OAuthBearerAuthenticationOptions());
-            */
-
-
-
-
-
-
-
+            
 
 
 

@@ -18,10 +18,10 @@ namespace Server.App_Start
  
         public override async Task GrantResourceOwnerCredentials(OAuthGrantResourceOwnerCredentialsContext context)
         {
-
-            context.OwinContext.Response.Headers.Add("Access-Control-Allow-Origin", new[] { "*" });
             try
             {
+                context.OwinContext.Response.Headers.Add("Access-Control-Allow-Origin", new[] { "*" });
+           
                 Persistences.CrewMemberPersistence _persistence
                     = new Persistences.CrewMemberPersistence();
 

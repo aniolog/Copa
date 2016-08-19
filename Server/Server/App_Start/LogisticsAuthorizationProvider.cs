@@ -19,13 +19,48 @@ namespace Server.App_Start
         public override async Task GrantResourceOwnerCredentials(OAuthGrantResourceOwnerCredentialsContext context)
         {
 
-            context.OwinContext.Response.Headers.Add("Access-Control-Allow-Origin", new[] { "*" });
+            try
+            {
+                context.OwinContext.Response.Headers.Add("Access-Control-Allow-Origin", new[] { "*" });
 
-            var identity = new ClaimsIdentity(context.Options.AuthenticationType);
-            identity.AddClaim(new Claim(ClaimTypes.Name, context.UserName));
-            identity.AddClaim(new Claim(ClaimTypes.Role, "user"));
+                Persistences.LogisticsDelegatePersistence _persistence
+                    = new Persistences.LogisticsDelegatePersistence();
 
-            context.Validated(identity);
+                Models.LogisticsDelegate _loginLogisticsDelegate =
+                    _persistence.FindLogisticsDelegateByEmail(context.UserName);
+
+                if (_loginLogisticsDelegate == null)
+                {
+                    throw new Exception();
+                }
+
+                Models.CrewMember _passwordValidator = new Models.CrewMember();
+                _passwordValidator.Password = context.Password;
+                _passwordValidator.CheckAndEncryptPassword();
+
+                if (_loginLogisticsDelegate.Password == _passwordValidator.Password)
+                {
+                    if (_loginLogisticsDelegate.ConfirmAccountId == null)
+                    {
+                        var identity = new ClaimsIdentity(context.Options.AuthenticationType);
+                        identity.AddClaim(new Claim(ClaimTypes.Name, _loginLogisticsDelegate.Id.ToString()));
+                        identity.AddClaim(new Claim(ClaimTypes.Role, "logisticdelegate"));
+                        context.Validated(identity);
+                    }
+                    else
+                    {
+                        throw new Exception();
+                    }
+                }
+                else
+                {
+                    throw new Exception();
+                }
+            }
+            catch (Exception E)
+            {
+                context.SetError("invalid_grant", "The user name or password are incorrect.");
+            }
 
         }
     }

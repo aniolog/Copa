@@ -7,32 +7,33 @@ using System.Web.Http;
 
 namespace Server.Controllers
 {
+    [Authorize]
+    [RoutePrefix("api/device")]
     public class DevicesController : ApiController
     {
-        // GET api/devices
-        public IEnumerable<string> Get()
-        {
-            return new string[] { "value1", "value2" };
-        }
-
-        // GET api/devices/5
-        public string Get(int id)
-        {
-            return "value";
-        }
 
         // POST api/devices
-        public void Post([FromBody]string value)
+        [HttpPost]
+        [Route("")]
+        public void Post([FromBody]Models.Device value)
         {
-        }
+            int Id = int.Parse(RequestContext.Principal.Identity.Name);
+            if (RequestContext.Principal.IsInRole("crewmember")) {
+               
+            }
+            else if (RequestContext.Principal.IsInRole("logisticdelegate"))
+            {
 
-        // PUT api/devices/5
-        public void Put(int id, [FromBody]string value)
-        {
+            }
+            else { 
+            
+            }
         }
 
         // DELETE api/devices/5
-        public void Delete(int id)
+        [HttpDelete]
+        [Route("{Token}")]
+        public void Delete([FromUri] String Token)
         {
         }
     }

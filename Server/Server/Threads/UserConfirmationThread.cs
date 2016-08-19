@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Server.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
@@ -29,10 +30,19 @@ namespace Server.Threads
         public void DeleteNotConfirmAccounts() {
             while (true)
             {
-                Thread.Sleep(1000);
-                IQueryable<Models.CrewMember> _crewMembers =
-                    this.CrewMemberPersistence.FindExpireCrewMembersConfirmation();
-                this.CrewMemberPersistence.DeleteCrewMember(_crewMembers);
+                using (var _context = new Context())
+                {
+                    IQueryable<Models.CrewMember> _selectedCrewMember =
+                                              from _crewMember in _context.CrewMembers
+                                              where _crewMember.ConfirmationLimit < DateTime.Now
+                                              select _crewMember;
+
+                    foreach (CrewMember _deletedCrewMember in _selectedCrewMember)
+                    {
+                        _context.CrewMembers.Remove(_deletedCrewMember);
+                    }
+                    _context.SaveChanges();
+                }
             }
         }
     }
