@@ -189,6 +189,7 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Logics\CrewMemberLogic.cs" />
+    <Compile Include="Logics\DeviceLogic.cs" />
     <Compile Include="Logics\LogisticsDelegateLogic.cs" />
     <Compile Include="Models\Bill.cs" />
     <Compile Include="Models\ModelResources.Designer.cs">
@@ -210,6 +211,7 @@
     <Compile Include="Models\User.cs" />
     <Compile Include="Models\Vehicle.cs" />
     <Compile Include="Persistences\CrewMemberPersistence.cs" />
+    <Compile Include="Persistences\DevicePersistence.cs" />
     <Compile Include="Persistences\LogisticsDelegatePersistence.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Pushs\GCM\GCMPush.cs" />

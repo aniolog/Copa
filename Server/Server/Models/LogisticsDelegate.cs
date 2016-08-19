@@ -30,17 +30,13 @@ namespace Server.Models
         /// </summary>
         public String SapId { set; get; }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        public ICollection<Device> Devices { set; get; }
 
         /// <summary>
         /// 
         /// </summary>
         public LogisticsDelegate():base()
         {
-            this.Devices = new HashSet<Device>();
+            
         }
     }
 }

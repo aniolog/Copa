@@ -40,10 +40,6 @@ namespace Server.Models
         /// </summary>
         public ICollection<Request> Requests { set; get; }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        public ICollection<Device> Devices { set; get; }
 
         /// <summary>
         /// 
@@ -52,7 +48,6 @@ namespace Server.Models
         {
             this.Vehicles = new HashSet<Vehicle>();
             this.Requests = new HashSet<Request>();
-            this.Devices  = new HashSet<Device>(); 
         }
 
     }

@@ -8,7 +8,7 @@ using System.Web.Http;
 namespace Server.Controllers
 {
     [Authorize]
-    [RoutePrefix("api/device")]
+    [RoutePrefix("api/devices")]
     public class DevicesController : ApiController
     {
 
@@ -18,12 +18,14 @@ namespace Server.Controllers
         public void Post([FromBody]Models.Device value)
         {
             int Id = int.Parse(RequestContext.Principal.Identity.Name);
+            Logics.DeviceLogic _logic = new Logics.DeviceLogic();
+
             if (RequestContext.Principal.IsInRole("crewmember")) {
-               
+                _logic.AddDeviceToCrewMember(value,Id);
             }
             else if (RequestContext.Principal.IsInRole("logisticdelegate"))
             {
-
+                _logic.AddDeviceToLogisticDelegate(value, Id);
             }
             else { 
             
@@ -35,6 +37,20 @@ namespace Server.Controllers
         [Route("{Token}")]
         public void Delete([FromUri] String Token)
         {
+            int Id = int.Parse(RequestContext.Principal.Identity.Name);
+            Logics.DeviceLogic _logic = new Logics.DeviceLogic();
+            if (RequestContext.Principal.IsInRole("crewmember"))
+            {
+                _logic.DeleteDeviceFromCrewMember(Token, Id);
+            }
+            else if (RequestContext.Principal.IsInRole("logisticdelegate"))
+            {
+                _logic.DeleteDeviceFromLogisticDelegate(Token, Id);
+            }
+            else
+            {
+
+            }
         }
     }
 }

@@ -61,11 +61,20 @@ namespace Server.Pushs.GCM {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to .
+        ///   Looks up a localized string similar to AIzaSyBdy78OBln9fFUHj6j2TrYk36GC7RjoyBs.
         /// </summary>
-        internal static string API_KEY {
+        internal static string Api_key {
             get {
-                return ResourceManager.GetString("API_KEY", resourceCulture);
+                return ResourceManager.GetString("Api_key", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 280118939045.
+        /// </summary>
+        internal static string Sender_id {
+            get {
+                return ResourceManager.GetString("Sender_id", resourceCulture);
             }
         }
     }

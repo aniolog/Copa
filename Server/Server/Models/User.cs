@@ -145,10 +145,16 @@ namespace Server.Models
         /// <summary>
         /// 
         /// </summary>
+        public ICollection<Device> Devices { get; set; }
+
+        /// <summary>
+        /// 
+        /// </summary>
         public User()
         {
             this.ConfirmAccountId = "";
             this.ConfirmationLimit = DateTime.Now;
+            this.Devices = new HashSet<Device>();
         }
 
 

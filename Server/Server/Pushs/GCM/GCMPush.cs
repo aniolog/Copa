@@ -17,7 +17,7 @@ namespace Server.Pushs.GCM
 
         public GCMPush()
         {
-            this.Configuration = new GcmConfiguration("280118939045", "AIzaSyBdy78OBln9fFUHj6j2TrYk36GC7RjoyBs", null);
+            this.Configuration = new GcmConfiguration(GCMResources.Sender_id, GCMResources.Api_key, null);
             this.Broker = new GcmServiceBroker(this.Configuration);
             this.Broker.OnNotificationFailed+=(Notification,aggregateEx)=>{
 

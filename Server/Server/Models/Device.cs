@@ -34,7 +34,7 @@ namespace Server.Models
         /// <summary>
         /// 
         /// </summary>
-        public ICollection<LogisticsDelegate> LogisticsDelegate { set; get; }
+        public ICollection<LogisticsDelegate> LogisticsDelegates { set; get; }
 
         /// <summary>
         /// 
@@ -47,7 +47,7 @@ namespace Server.Models
         public Device()
         {
             this.CrewMembers = new HashSet<CrewMember>();
-            this.LogisticsDelegate = new HashSet<LogisticsDelegate>();
+            this.LogisticsDelegates = new HashSet<LogisticsDelegate>();
             this.Providers = new HashSet<Provider>();
         }
 

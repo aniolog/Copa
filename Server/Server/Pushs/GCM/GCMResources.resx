@@ -117,7 +117,10 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="API_KEY" xml:space="preserve">
-    <value />
+  <data name="Api_key" xml:space="preserve">
+    <value>AIzaSyBdy78OBln9fFUHj6j2TrYk36GC7RjoyBs</value>
+  </data>
+  <data name="Sender_id" xml:space="preserve">
+    <value>280118939045</value>
   </data>
 </root>

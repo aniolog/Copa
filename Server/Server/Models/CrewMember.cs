@@ -37,10 +37,7 @@ namespace Server.Models
         /// </summary>
         public ICollection<TeamMember> TeamMembers { get; set; }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        public ICollection<Device> Devices { get; set; }
+       
 
         /// <summary>
         /// 
@@ -48,11 +45,11 @@ namespace Server.Models
         public ICollection<Place> Places { get; set; }
 
 
-        public CrewMember()
+        public CrewMember():base()
         {
             this.TeamMembers = new HashSet<TeamMember>();
-            this.Devices = new HashSet<Device>();
             this.Places = new HashSet<Place>();
+            
             
         }
 
