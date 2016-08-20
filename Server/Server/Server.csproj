@@ -114,6 +114,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\PushSharp.4.0.10\lib\net45\PushSharp.Windows.dll</HintPath>
     </Reference>
+    <Reference Include="RestSharp">
+      <HintPath>..\packages\RestSharp.105.2.3\lib\net45\RestSharp.dll</HintPath>
+    </Reference>
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Net.Http.Formatting, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -223,7 +226,13 @@
     <Compile Include="Pushs\Ios\IosPush.cs" />
     <Compile Include="Pushs\Push.cs" />
     <Compile Include="Pushs\PushFactory.cs" />
-    <Compile Include="Rests\RestRequest.cs" />
+    <Compile Include="Rests\GeoCodingRequest.cs" />
+    <Compile Include="Rests\Request.cs" />
+    <Compile Include="Rests\RestResources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>RestResources.resx</DependentUpon>
+    </Compile>
     <Compile Include="Threads\UserConfirmationThread.cs" />
     <Compile Include="WebSockets\List\LogisticsWebSocketList.cs" />
     <Compile Include="WebSockets\List\ProviderWebSocketList.cs" />
@@ -254,6 +263,10 @@
     <EmbeddedResource Include="Pushs\GCM\GCMResources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>GCMResources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Rests\RestResources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>RestResources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

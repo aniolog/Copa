@@ -30,6 +30,10 @@ namespace Server.Models
         /// </summary>
         public String SapId { set; get; }
 
+        /// <summary>
+        /// This attribute repesent that the delegate is an admin
+        /// </summary>
+        public Boolean IsAdmin { set; get; }
 
         /// <summary>
         /// 

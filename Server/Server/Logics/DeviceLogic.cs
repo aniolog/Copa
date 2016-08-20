@@ -50,7 +50,10 @@ namespace Server.Logics
             this.DevicePersistence = new Persistences.DevicePersistence();
             Device _device = this.DevicePersistence.FindByToken(Device.Token);
             Device = (_device == null) ? Device : _device;
-            this.DevicePersistence.AddDeviceToUser(Device,User);
+            if (!(this.DevicePersistence.UserHasDevice(User,Device.Token)))
+            {
+                this.DevicePersistence.AddDeviceToUser(Device, User);
+            }
         }
 
         private void DeleteDeviceFromUser(User User, String DeviceToken)

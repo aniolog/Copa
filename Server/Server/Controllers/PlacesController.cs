@@ -12,6 +12,8 @@ namespace Server.Controllers
         // GET api/places
         public IEnumerable<string> Get()
         {
+            Rests.GeoCodingRequest _geoRequest = new Rests.GeoCodingRequest("la guaira");
+            _geoRequest.GetGeoCoding();
             return new string[] { "value1", "value2" };
         }
 

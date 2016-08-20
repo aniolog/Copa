@@ -36,6 +36,19 @@ namespace Server.Persistences
             }
         }
 
+        public Boolean UserHasDevice(User User, String Token) {
+            foreach (Device _device in User.Devices)
+            {
+
+                if (_device.Token == Token) {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+
+
         public void RemoveDeviceFromUser(Device Device, User User)
         {
 

@@ -21,6 +21,7 @@ namespace Server.Logics
                 throw new Exception();
             }
             NewCrewMember.CheckAndEncryptPassword();
+            NewCrewMember.CheckEmail();
             Models.CrewMember _savedCrewMember=
                 this.CrewMemberPersistence.AddOrUpdateCrewMember(NewCrewMember);
            Thread _workerThread = new Thread( _savedCrewMember.SendConfirmationEmail);

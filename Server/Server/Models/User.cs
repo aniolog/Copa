@@ -32,15 +32,7 @@ namespace Server.Models
         [Required]
         public String Email { 
             set {
-                Regex _Regex = new Regex(@"^([\w\.\-]+)@([\w\-]+)((\.(\w){2,3})+)$");
-                if (_Regex.Match(value).Success)
-                {
-                    this.UserMail = value;
-                }
-                else
-                {
-                    throw new Exceptions.InvalidEmailException();
-                }
+                this.UserMail = value;
         
             }
             get {
@@ -182,6 +174,15 @@ namespace Server.Models
             
        }
 
+        public void CheckEmail() { 
+             
+            Regex _Regex = new Regex(@"[_a-z0-9-]+(\.[_a-z0-9-]+)*@(?i)gmail.com");
+            if (!(_Regex.Match(this.UserMail).Success))
+            {
+                throw new Exceptions.InvalidEmailException();
+            }
+        }
+
         /// <summary>
         /// 
         /// </summary>
@@ -232,18 +233,19 @@ namespace Server.Models
         /// <param name="Body"></param>
         private void SendEmail(String Subject, String Body)
         {
-            MailMessage _mail = new MailMessage();
-            SmtpClient _smtpServer = new SmtpClient("smtp.gmail.com");
-            _smtpServer.Port = 587;
-            _smtpServer.Credentials = new System.Net.NetworkCredential(ModelResources.Email,
-                ModelResources.Password);
-            _smtpServer.EnableSsl = true;
-            _mail.From = new MailAddress("enfermeriacsap@gmail.com");
-            _mail.To.Add(this.UserMail);
-            _mail.Subject = Subject;
-            _mail.IsBodyHtml = true;
-            _mail.Body = Body;
-            _smtpServer.Send(_mail);
+            
+                MailMessage _mail = new MailMessage();
+                SmtpClient _smtpServer = new SmtpClient("smtp.gmail.com");
+                _smtpServer.Port = 587;
+                _smtpServer.Credentials = new System.Net.NetworkCredential(ModelResources.Email,
+                    ModelResources.Password);
+                _smtpServer.EnableSsl = true;
+                _mail.To.Add(this.UserMail);
+                _mail.Subject = Subject;
+                _mail.IsBodyHtml = true;
+                _mail.Body = Body;
+                _smtpServer.Send(_mail);
+            
          
         }
     }

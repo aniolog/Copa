@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Server.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
@@ -24,6 +25,7 @@ namespace Server.Logics
             {
                 throw new Exception();
             }
+            NewLogisticsDelegate.CheckEmail();
             NewLogisticsDelegate.CheckAndEncryptPassword();
             Models.LogisticsDelegate _savedLogisticDelegate =
                 this.LogisticDelegatePersistence.AddOrUpdateLogisticsDelegate(NewLogisticsDelegate);
@@ -93,7 +95,6 @@ namespace Server.Logics
             this.LogisticDelegatePersistence.AddOrUpdateLogisticsDelegate(_resetPasswordDelegate);
         }
 
-
         public void UpdateLogisticDelegate(int id, Models.LogisticsDelegate Data)
         {
             Models.LogisticsDelegate _updateLogisticDelegate =
@@ -119,6 +120,25 @@ namespace Server.Logics
             this.LogisticDelegatePersistence.AddOrUpdateLogisticsDelegate(_updateLogisticDelegate);
         }
 
+        public void PromoteDelegate(int id)
+        {
+            Models.LogisticsDelegate _updateLogisticDelegate =
+                 this.LogisticDelegatePersistence.FindById(id);
+            _updateLogisticDelegate.IsAdmin = true;
+            this.LogisticDelegatePersistence.AddOrUpdateLogisticsDelegate(_updateLogisticDelegate);
+        }
+
+
+
+        public Boolean DelegateHasPermision(int DelegateId) {
+
+           LogisticsDelegate _delegate= this.LogisticDelegatePersistence.FindById(DelegateId);
+
+           if ((_delegate.IsAdmin)) {
+               throw new Exception("Denied");
+           }
+           return true;
+        }
 
 
 

@@ -7,11 +7,13 @@ using System.Web.Http;
 
 namespace Server.Controllers
 {
-    [Authorize]
+    [Authorize(Roles = "logisticdelegate")]
     [RoutePrefix("api/logisticsdelegates")]
     public class LogisticsDelegatesController : ApiController
     {
         // GET api/logisticsdelegates
+        [HttpGet]
+        [Route("")]
         public IEnumerable<string> Get()
         {
             return new string[] { "value1", "value2" };
@@ -24,17 +26,17 @@ namespace Server.Controllers
         }
 
         // POST api/logisticsdelegates
-        [AllowAnonymous]
         [HttpPost]
         [Route("")]
         public void Post([FromBody]Models.LogisticsDelegate value)
         {
+            int Id = int.Parse(RequestContext.Principal.Identity.Name);
             Logics.LogisticsDelegateLogic _logic = new Logics.LogisticsDelegateLogic();
+            _logic.DelegateHasPermision(Id);
             _logic.AddLogisticDelegate(value);
         }
 
         // PUT api/logisticsdelegates/5
-        [Authorize(Roles = "logisticsdelegate")]
         [HttpPut]
         [Route("")]
         public void Put([FromBody]Models.LogisticsDelegate value)
@@ -44,6 +46,19 @@ namespace Server.Controllers
             _logic.UpdateLogisticDelegate(Id,value);
 
         }
+
+        // GET api/logisticsdelegates
+        [HttpGet]
+        [Route("promote/{PromoteId}")]
+        public void Promote([FromUri] int PromoteId)
+        {
+            int Id = int.Parse(RequestContext.Principal.Identity.Name);
+            Logics.LogisticsDelegateLogic _logic = new Logics.LogisticsDelegateLogic();
+            _logic.DelegateHasPermision(Id);
+            _logic.PromoteDelegate(PromoteId);
+        }
+
+
 
         // GET api/logisticsdelegates/confirm/
         [AllowAnonymous]
