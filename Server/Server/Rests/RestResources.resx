@@ -121,6 +121,6 @@
     <value>AIzaSyCq876EM3-o0WsuBV508VacN1VaqtTtM28</value>
   </data>
   <data name="GeoCoding_BaseUrl" xml:space="preserve">
-    <value>https://maps.googleapis.com/maps/api/geocode/json?address={0}CA&amp;key={1}</value>
+    <value>https://maps.googleapis.com/maps/api/geocode/json?address={0}&amp;key={1}</value>
   </data>
 </root>

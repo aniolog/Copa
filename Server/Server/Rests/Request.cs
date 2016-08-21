@@ -8,12 +8,11 @@ namespace Server.Rest
 {
     public abstract class Request
     {
-
-        public string BaseUrl { get; set; }
+        public String Response { set; get; }
 
         public RestClient Client { get; set; }
 
-        public RestRequest ServerRequest;
+        public RestRequest ServerRequest { get; set; }
 
         public String MakeRequest() {
             IRestResponse _response = Client.Execute(ServerRequest);

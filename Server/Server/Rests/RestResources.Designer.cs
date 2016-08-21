@@ -70,7 +70,7 @@ namespace Server.Rests {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to https://maps.googleapis.com/maps/api/geocode/json?address={0}CA&amp;key={1}.
+        ///   Looks up a localized string similar to https://maps.googleapis.com/maps/api/geocode/json?address={0}&amp;key={1}.
         /// </summary>
         internal static string GeoCoding_BaseUrl {
             get {

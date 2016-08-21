@@ -141,7 +141,13 @@ namespace Server.Persistences
         /// </summary>
         /// <returns>All crew members</returns>
         public IQueryable<Models.CrewMember> FindAll() {
-            return CurrentContext.CrewMembers;
+            try
+            {
+                return CurrentContext.CrewMembers;
+            }
+            catch (Exception E) {
+                return null;
+            }
         }
 
 
@@ -151,7 +157,13 @@ namespace Server.Persistences
         /// <param name="CrewMemberId"></param>
         /// <returns>The crew member with the given id</returns>
         public Models.CrewMember FindById(int CrewMemberId) {
-            return CurrentContext.CrewMembers.Find(CrewMemberId);
+            try
+            {
+                return CurrentContext.CrewMembers.Find(CrewMemberId);
+            }
+            catch (Exception E) {
+                return null;
+            }
         }
 
         /// <summary>

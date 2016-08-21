@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Server.Logics;
+using Server.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
@@ -7,37 +9,60 @@ using System.Web.Http;
 
 namespace Server.Controllers
 {
+    [Authorize(Roles="crewmember")]
+    [RoutePrefix("api/places")]
     public class PlacesController : ApiController
     {
         // GET api/places
-        public IEnumerable<string> Get()
+        [Route("")]
+        [HttpGet]
+        public IEnumerable<Place> Get()
         {
-            Rests.GeoCodingRequest _geoRequest = new Rests.GeoCodingRequest("la guaira");
-            _geoRequest.GetGeoCoding();
-            return new string[] { "value1", "value2" };
+            int Id = int.Parse(RequestContext.Principal.Identity.Name);
+            PlaceLogic _logic = new PlaceLogic();
+            return _logic.FindPlaces(Id);
         }
 
-        // GET api/places/5
-        public string Get(int id)
-        {
-            Models.Model.DataBase.GetInstance().Places.Add(new Models.Place());
-            return "value";
-        }
 
         // POST api/places
-        public void Post([FromBody]string value)
+        [Route("")]
+        [HttpPost]
+        public void Post([FromBody]Place value)
         {
+            int Id = int.Parse(RequestContext.Principal.Identity.Name);
+            PlaceLogic _logic = new PlaceLogic();
+            _logic.AddPlace(Id,value);
         }
 
-        // PUT api/places/5
-        public void Put(int id, [FromBody]string value)
+        // PUT api/places/1
+        [Route("{PlaceId}")]
+        [HttpPut]
+        public void Put([FromUri] int PlaceId, [FromBody]Place value)
         {
+            int Id = int.Parse(RequestContext.Principal.Identity.Name);
+            PlaceLogic _logic = new PlaceLogic();
+            value.Id = PlaceId;
+            _logic.UpdatePlace(value,Id);
         }
 
         // DELETE api/places/5
-        public void Delete(int id)
+        [Route("{PlaceId}")]
+        [HttpDelete]
+        public void Delete([FromUri] int PlaceId)
         {
-
+            int Id = int.Parse(RequestContext.Principal.Identity.Name);
+            PlaceLogic _logic = new PlaceLogic();
+            _logic.DeletePlace(PlaceId,Id);
         }
+
+        [AllowAnonymous]
+        [Route("geocoding/{Address}")]
+        [HttpGet]
+        public List<Place> GetGeoCoding([FromUri] String Address) {
+            Rests.GeoCodingRequest Request = new Rests.GeoCodingRequest(Address);
+            return Request.GetGeoCoding();
+            
+        }
+
     }
 }
