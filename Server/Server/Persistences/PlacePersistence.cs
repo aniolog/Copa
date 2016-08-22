@@ -24,9 +24,10 @@ namespace Server.Persistences
         }
 
         public void DeletePlace(Place DeletedPlace) {
-            if (CurrentContext.Places.Contains(DeletedPlace)) {
-                CurrentContext.Places.Remove(DeletedPlace);
-            }
+                Place _deletedPlace= CurrentContext.Places.Find(DeletedPlace.Id);
+                CurrentContext.Places.Remove(_deletedPlace);
+                CurrentContext.SaveChanges();
+            
         }
 
         public Place FindById(long PlaceId) {

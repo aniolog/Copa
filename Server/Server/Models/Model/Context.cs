@@ -13,7 +13,7 @@ namespace Server.Models
         public Context()
             : base("Database")
         {
-
+            this.Configuration.LazyLoadingEnabled = true;
         }
 
         public DbSet<Bill> Bills { set; get; }

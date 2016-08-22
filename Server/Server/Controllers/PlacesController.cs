@@ -55,7 +55,7 @@ namespace Server.Controllers
             _logic.DeletePlace(PlaceId,Id);
         }
 
-        [AllowAnonymous]
+
         [Route("geocoding/{Address}")]
         [HttpGet]
         public List<Place> GetGeoCoding([FromUri] String Address) {

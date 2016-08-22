@@ -240,6 +240,7 @@ namespace Server.Models
                 _smtpServer.Credentials = new System.Net.NetworkCredential(ModelResources.Email,
                     ModelResources.Password);
                 _smtpServer.EnableSsl = true;
+                _mail.From = new MailAddress(ModelResources.Email);
                 _mail.To.Add(this.UserMail);
                 _mail.Subject = Subject;
                 _mail.IsBodyHtml = true;
