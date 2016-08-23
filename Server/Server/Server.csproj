@@ -195,11 +195,13 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Logics\BaseLogic.cs" />
     <Compile Include="Logics\CrewMemberLogic.cs" />
     <Compile Include="Logics\DeviceLogic.cs" />
     <Compile Include="Logics\LogisticsDelegateLogic.cs" />
     <Compile Include="Logics\PlaceLogic.cs" />
     <Compile Include="Logics\ProviderLogic.cs" />
+    <Compile Include="Logics\VehicleLogic.cs" />
     <Compile Include="Models\Bill.cs" />
     <Compile Include="Models\ModelResources.Designer.cs">
       <AutoGen>True</AutoGen>

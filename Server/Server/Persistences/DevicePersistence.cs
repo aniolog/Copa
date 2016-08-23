@@ -8,8 +8,12 @@ namespace Server.Persistences
 {
     public class DevicePersistence
     {
-        private static Models.Context CurrentContext = Models.Model.DataBase.GetInstance();
+        private  Models.Context CurrentContext;
 
+        public DevicePersistence(Models.Context CurrentContext)
+        {
+            this.CurrentContext = CurrentContext;
+        }
 
 
         public Device FindByToken(String Token)

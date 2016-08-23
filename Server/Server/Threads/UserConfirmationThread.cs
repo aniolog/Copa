@@ -18,8 +18,6 @@ namespace Server.Threads
         /// </summary>
         public UserConfirmationThread()
         {
-            this.CrewMemberPersistence =
-                new Persistences.CrewMemberPersistence();
             Thread _crewMemberThread = new Thread(this.DeleteCrewMemberNotConfirmAccounts);
             _crewMemberThread.Start();
 

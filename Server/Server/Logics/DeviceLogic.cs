@@ -6,20 +6,26 @@ using System.Web;
 
 namespace Server.Logics
 {
-    public class DeviceLogic
+    public class DeviceLogic:BaseLogic
     {
         Persistences.CrewMemberPersistence CrewMemberPersistence;
         Persistences.LogisticsDelegatePersistence LogisticsDelegatePersistence;
         Persistences.DevicePersistence DevicePersistence;
 
+        public DeviceLogic():base()
+        {
+
+        }
+
+
         public void AddDeviceToCrewMember(Device Device, int CrewMemberId) {
-            this.CrewMemberPersistence = new Persistences.CrewMemberPersistence();
+            this.CrewMemberPersistence = new Persistences.CrewMemberPersistence(this.CurrentContext);
             CrewMember _crewMember = this.CrewMemberPersistence.FindById(CrewMemberId);
             this.AddDeviceToUser(_crewMember,Device);
         }
 
         public void DeleteDeviceFromCrewMember(String DeviceToken, int CrewMemberId) {
-            this.CrewMemberPersistence = new Persistences.CrewMemberPersistence();
+            this.CrewMemberPersistence = new Persistences.CrewMemberPersistence(this.CurrentContext);
             CrewMember _crewMember = this.CrewMemberPersistence.FindById(CrewMemberId);
             this.DeleteDeviceFromUser(_crewMember,DeviceToken);
         }
@@ -27,7 +33,7 @@ namespace Server.Logics
 
         public void AddDeviceToLogisticDelegate(Device Device, int LogisticDelegareId)
         {
-            this.LogisticsDelegatePersistence= new Persistences.LogisticsDelegatePersistence();
+            this.LogisticsDelegatePersistence = new Persistences.LogisticsDelegatePersistence(this.CurrentContext);
             LogisticsDelegate _logisticDelegate = 
                 this.LogisticsDelegatePersistence.FindById(LogisticDelegareId);
             this.AddDeviceToUser(_logisticDelegate, Device);
@@ -35,7 +41,7 @@ namespace Server.Logics
 
         public void DeleteDeviceFromLogisticDelegate(String DeviceToken, int LogisticDelegareId)
         {
-            this.LogisticsDelegatePersistence = new Persistences.LogisticsDelegatePersistence();
+            this.LogisticsDelegatePersistence = new Persistences.LogisticsDelegatePersistence(this.CurrentContext);
             LogisticsDelegate _logisticDelegate =
                 this.LogisticsDelegatePersistence.FindById(LogisticDelegareId);
             this.DeleteDeviceFromUser(_logisticDelegate, DeviceToken);
@@ -47,7 +53,7 @@ namespace Server.Logics
             if (String.IsNullOrEmpty(Device.Token)) {
                 throw new Exception("Invalid Token");
             }
-            this.DevicePersistence = new Persistences.DevicePersistence();
+            this.DevicePersistence = new Persistences.DevicePersistence(this.CurrentContext);
             Device _device = this.DevicePersistence.FindByToken(Device.Token);
             Device = (_device == null) ? Device : _device;
             if (!(this.DevicePersistence.UserHasDevice(User,Device.Token)))
@@ -62,7 +68,7 @@ namespace Server.Logics
             {
                 throw new Exception("Invalid Token");
             }
-            this.DevicePersistence = new Persistences.DevicePersistence();
+            this.DevicePersistence = new Persistences.DevicePersistence(this.CurrentContext);
             Device _device = this.DevicePersistence.FindByToken(DeviceToken);
             if (_device == null) {
                 throw new Exception("No existe");

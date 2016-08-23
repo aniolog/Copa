@@ -22,9 +22,9 @@ namespace Server.App_Start
             try
             {
                 context.OwinContext.Response.Headers.Add("Access-Control-Allow-Origin", new[] { "*" });
-
+                Models.Context _currentContext = new Models.Context();
                 Persistences.LogisticsDelegatePersistence _persistence
-                    = new Persistences.LogisticsDelegatePersistence();
+                    = new Persistences.LogisticsDelegatePersistence(_currentContext);
 
                 Models.LogisticsDelegate _loginLogisticsDelegate =
                     _persistence.FindLogisticsDelegateByEmail(context.UserName);

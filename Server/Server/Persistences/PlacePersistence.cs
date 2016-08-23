@@ -11,7 +11,13 @@ namespace Server.Persistences
         /// <summary>
         /// The Curent database context
         /// </summary>
-        private static Models.Context CurrentContext = Models.Model.DataBase.GetInstance();
+        private  Models.Context CurrentContext;
+
+        public PlacePersistence(Models.Context CurrentContext)
+        {
+            this.CurrentContext = CurrentContext;
+        }
+
 
         public void UpdateOrAddPlace(Place NewPlace,CrewMember Member) {
             if (NewPlace.Id == 0)

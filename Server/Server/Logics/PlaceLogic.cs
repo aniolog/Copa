@@ -7,15 +7,15 @@ using System.Web;
 
 namespace Server.Logics
 {
-    public class PlaceLogic
+    public class PlaceLogic:BaseLogic
     {
         CrewMemberPersistence MemberPersistence;
         PlacePersistence PlacePersistence;
 
-        public PlaceLogic()
+        public PlaceLogic():base()
         {
-            this.PlacePersistence = new PlacePersistence();
-            this.MemberPersistence = new CrewMemberPersistence();
+            this.PlacePersistence = new PlacePersistence(this.CurrentContext);
+            this.MemberPersistence = new CrewMemberPersistence(this.CurrentContext);
         }
 
         public void AddPlace(int MemberId, Place NewPlace) {

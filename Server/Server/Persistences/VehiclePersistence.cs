@@ -11,7 +11,12 @@ namespace Server.Persistences
         /// <summary>
         /// The Curent database context
         /// </summary>
-        private static Models.Context CurrentContext = Models.Model.DataBase.GetInstance();
+        private  Models.Context CurrentContext;
+
+        public VehiclePersistence(Models.Context CurrentContext)
+        {
+            this.CurrentContext = CurrentContext;
+        }
 
         public Vehicle FindByType(Models.Vehicle.VehicleType Type) {
             try

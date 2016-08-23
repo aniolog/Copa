@@ -6,13 +6,14 @@ using System.Web;
 
 namespace Server.Logics
 {
-    public class CrewMemberLogic
+    public class CrewMemberLogic:BaseLogic
     {
         private Persistences.CrewMemberPersistence CrewMemberPersistence;
-        public CrewMemberLogic()
+
+        public CrewMemberLogic():base()
         {
             this.CrewMemberPersistence = 
-                new Persistences.CrewMemberPersistence();
+                new Persistences.CrewMemberPersistence(this.CurrentContext);
         }
 
         public void AddCrewMember(Models.CrewMember NewCrewMember) {

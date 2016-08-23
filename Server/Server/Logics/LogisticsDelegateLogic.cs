@@ -7,14 +7,14 @@ using System.Web;
 
 namespace Server.Logics
 {
-    public class LogisticsDelegateLogic
+    public class LogisticsDelegateLogic:BaseLogic
     {
         private Persistences.LogisticsDelegatePersistence LogisticDelegatePersistence;
 
-        public LogisticsDelegateLogic()
+        public LogisticsDelegateLogic():base()
         {
-            this.LogisticDelegatePersistence = new 
-                Persistences.LogisticsDelegatePersistence();
+            this.LogisticDelegatePersistence = new
+                Persistences.LogisticsDelegatePersistence(this.CurrentContext);
         }
 
         public void AddLogisticDelegate(Models.LogisticsDelegate NewLogisticsDelegate)

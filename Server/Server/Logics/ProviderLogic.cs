@@ -6,17 +6,17 @@ using System.Web;
 
 namespace Server.Logics
 {
-    public class ProviderLogic
+    public class ProviderLogic:BaseLogic
     {
 
         private Persistences.ProviderPersistence ProviderPersistence;
 
         private Persistences.VehiclePersistence VehiclePersistence;
 
-        public ProviderLogic()
+        public ProviderLogic():base()
         {
-            this.ProviderPersistence = new Persistences.ProviderPersistence();
-            this.VehiclePersistence = new Persistences.VehiclePersistence();
+            this.ProviderPersistence = new Persistences.ProviderPersistence(this.CurrentContext);
+            this.VehiclePersistence = new Persistences.VehiclePersistence(this.CurrentContext);
         }
 
 

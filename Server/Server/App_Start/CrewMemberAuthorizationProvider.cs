@@ -21,9 +21,10 @@ namespace Server.App_Start
             try
             {
                 context.OwinContext.Response.Headers.Add("Access-Control-Allow-Origin", new[] { "*" });
-           
+
+                Models.Context _currentContext = new Models.Context();
                 Persistences.CrewMemberPersistence _persistence
-                    = new Persistences.CrewMemberPersistence();
+                    = new Persistences.CrewMemberPersistence(_currentContext);
 
                 Models.CrewMember _loginCrewMember = _persistence.FindCrewMemberByEmail(context.UserName);
 

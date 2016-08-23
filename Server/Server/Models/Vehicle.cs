@@ -31,7 +31,7 @@ namespace Server.Models
 
 
         public enum VehicleType { 
-            Van,Suv,Car
+            Van=1,Suv=2,Car=3
         }
     }
 }
