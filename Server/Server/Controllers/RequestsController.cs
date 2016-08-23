@@ -7,6 +7,8 @@ using System.Web.Http;
 
 namespace Server.Controllers
 {
+    [Authorize]
+    [RoutePrefix("api/requets")]
     public class RequestsController : ApiController
     {
         // GET api/requests
@@ -21,19 +23,28 @@ namespace Server.Controllers
             return "value";
         }
 
-        // POST api/requests
-        public void Post([FromBody]string value)
-        {
+        [Filters.CrewMemberRegisterRequest]
+        [Authorize(Roles = "crewmember")]
+        [Route("crewmember")]
+        [HttpPost]
+        public void CrewMemberRegisterRequest([FromBody] Models.Request value) {
+            var dos = 1 + 1;
+        
+        
         }
+        
 
-        // PUT api/requests/5
-        public void Put(int id, [FromBody]string value)
-        {
-        }
 
-        // DELETE api/requests/5
-        public void Delete(int id)
-        {
-        }
+
+
+
+
+
+
+
+
+
+
+
     }
 }

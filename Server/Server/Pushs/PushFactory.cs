@@ -7,8 +7,7 @@ namespace Server.Pushs
 {
     public class PushFactory
     {
-        public static Push GetPushSender() {
-
+        public Push GetGcmPushSender() {
             return new GCM.GCMPush();
         }
     }

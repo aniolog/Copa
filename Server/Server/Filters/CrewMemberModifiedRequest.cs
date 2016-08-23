@@ -2,10 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using System.Web.Http.Filters;
 
 namespace Server.Filters
 {
-    public class UserRejectedRequestFilter
+    public class CrewMemberModifiedRequest : ActionFilterAttribute
     {
     }
 }

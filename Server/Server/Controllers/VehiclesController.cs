@@ -7,6 +7,7 @@ using System.Web.Http;
 
 namespace Server.Controllers
 {
+    [RoutePrefix("api/vehicles")]
     public class VehiclesController : ApiController
     {
         // GET api/vehicles
@@ -21,19 +22,11 @@ namespace Server.Controllers
             return "value";
         }
 
-        // POST api/vehicles
-        public void Post([FromBody]string value)
-        {
-        }
+        [Route("")]
+        public List<String> GetTypes(){
 
-        // PUT api/vehicles/5
-        public void Put(int id, [FromBody]string value)
-        {
-        }
-
-        // DELETE api/vehicles/5
-        public void Delete(int id)
-        {
+            return Enum.GetNames(typeof(Models.Vehicle.VehicleType)).ToList();
+            
         }
     }
 }

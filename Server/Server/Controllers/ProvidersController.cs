@@ -7,33 +7,44 @@ using System.Web.Http;
 
 namespace Server.Controllers
 {
+   // [Authorize(Roles = "logisticdelegate")]
+    [RoutePrefix("api/providers")]
     public class ProvidersController : ApiController
     {
-        // GET api/provides
-        public IEnumerable<string> Get()
+        [Route("")]
+        [HttpGet]
+        public IEnumerable<Models.Provider> Get()
         {
-            return new string[] { "value1", "value2" };
+            Logics.ProviderLogic _logic = new Logics.ProviderLogic();
+            return _logic.GetProviders();
         }
 
         // GET api/provides/5
-        public string Get(int id)
+        [Route("{Id}")]
+        [HttpGet]
+        public Models.Provider Get(long Id)
         {
-            return "value";
+            Logics.ProviderLogic _logic = new Logics.ProviderLogic();
+            return _logic.FindProvider(Id);
         }
 
         // POST api/provides
-        public void Post([FromBody]string value)
+        [Route("")]
+        [HttpPost]
+        public void Post([FromBody]Models.Provider value)
         {
+            Logics.ProviderLogic _logic = new Logics.ProviderLogic();
+            _logic.AddProvider(value);
         }
 
         // PUT api/provides/5
-        public void Put(int id, [FromBody]string value)
+        [Route("{Id}")]
+        [HttpPut]
+        public void Put(long Id, [FromBody]Models.Provider value)
         {
+            Logics.ProviderLogic _logic = new Logics.ProviderLogic();
+            _logic.UpdateProvider(Id,value);
         }
 
-        // DELETE api/provides/5
-        public void Delete(int id)
-        {
-        }
     }
 }

@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -13,9 +15,9 @@ namespace Server.Models
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public long Id { set; get; }
 
+        [JsonConverter(typeof(StringEnumConverter))]
         [Required] 
         public VehicleType Type { set; get; }
-
 
         public ICollection<Provider> Providers { set; get; }
 

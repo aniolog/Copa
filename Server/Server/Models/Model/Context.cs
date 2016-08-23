@@ -28,7 +28,7 @@ namespace Server.Models
 
         public DbSet<Place> Places { set; get; }
 
-        public DbSet<Provider> Provider { set; get; }
+        public DbSet<Provider> Providers { set; get; }
 
         public DbSet<Rate> Rates { set; get; }
 
@@ -38,6 +38,7 @@ namespace Server.Models
 
         public DbSet<Vehicle> Vehicles { set; get; }
 
+        public DbSet<RequestedVehicle> RequestedVehicles { set; get; }
 
     }
 }

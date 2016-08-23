@@ -12,7 +12,7 @@ namespace Server.Pushs.GCM
     {
         private GcmConfiguration Configuration;
         private GcmServiceBroker Broker;
-        
+        private List<String> Tokens;
 
 
         public GCMPush()
@@ -83,23 +83,29 @@ namespace Server.Pushs.GCM
             
             
             };
+            this.Tokens= new List<string>();
             this.Broker.Start();
         }
 
 
+        // "fPumEGyIg_0:APA91bHp9KxqB_dYS4GaG-xW9wOmmpBXxuwFsA_FM1MT2w2vLEekPMU-KlvR0UYs9xm8-Z0SZIOvLbnNzMaHxHi7ZNpVWi9xQINqLd5nOP-0HSEcT9kZuFpn9XID28mAELR3lEK7ck4H"
+        //  "APA91bEryvniHWx3vgBQSBktNNjA971X3IowTLdV0AeDhn0dNIToI7X3IZmvK8xmSjMeOofEcl4GOmU0Pis2UME31PD_mn9yQc8ybkCuAWCWLjf-dh5szZTkuO7T-TjxKCtyoctUjJW3"
         public void Send()
         {
-            List<String> Ids = new List<string>() {
-            "fPumEGyIg_0:APA91bHp9KxqB_dYS4GaG-xW9wOmmpBXxuwFsA_FM1MT2w2vLEekPMU-KlvR0UYs9xm8-Z0SZIOvLbnNzMaHxHi7ZNpVWi9xQINqLd5nOP-0HSEcT9kZuFpn9XID28mAELR3lEK7ck4H",
-            "APA91bEryvniHWx3vgBQSBktNNjA971X3IowTLdV0AeDhn0dNIToI7X3IZmvK8xmSjMeOofEcl4GOmU0Pis2UME31PD_mn9yQc8ybkCuAWCWLjf-dh5szZTkuO7T-TjxKCtyoctUjJW3"
-            };
+
             this.Broker.QueueNotification(new GcmNotification { 
            
-                RegistrationIds=Ids,
+                RegistrationIds=this.Tokens,
                 Data = JObject.Parse("{ \"title\" : \"Hola\" , \"message\" : \"Hola\"}")
 
             
             });
+            this.Broker.Stop();
+        }
+
+        void Push.AddToken(string Token)
+        {
+            this.Tokens.Add(Token);
         }
     }
 }

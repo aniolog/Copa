@@ -7,7 +7,7 @@ using System.Web;
 
 namespace Server.Models
 {
-    public class Provider:User
+    public class Provider
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
@@ -30,6 +30,17 @@ namespace Server.Models
         [Required] 
         public String Telephone { set; get; }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        [Required]
+        public String ContactName { set; get; }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        [Required]
+        public string Address { set; get; }
         /// <summary>
         /// 
         /// </summary>

@@ -59,5 +59,23 @@ namespace Server.Filters {
                 resourceCulture = value;
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to NewRequestByCrewMember.
+        /// </summary>
+        internal static string CrewMemberRegisterNotification {
+            get {
+                return ResourceManager.GetString("CrewMemberRegisterNotification", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {&quot;Event&quot;:&quot;{0}&quot;,&quot;MadeBy&quot;:&quot;{1}&quot;,&quot;Data&quot;:&quot;{2}&quot;}.
+        /// </summary>
+        internal static string WebSocketNotificacion {
+            get {
+                return ResourceManager.GetString("WebSocketNotificacion", resourceCulture);
+            }
+        }
     }
 }

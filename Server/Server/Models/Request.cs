@@ -22,7 +22,7 @@ namespace Server.Models
 
         public Place Destination { set; get; }
 
-        public ICollection<Vehicle> RequestedVehicles { set; get; }
+        public ICollection<RequestedVehicle> RequestedVehicles { set; get; }
 
         public LogisticsDelegate CancelDelegate { set; get; }
 
@@ -35,7 +35,7 @@ namespace Server.Models
 
         public Request()
         {
-            this.RequestedVehicles = new HashSet<Vehicle>();
+            this.RequestedVehicles = new HashSet<RequestedVehicle>();
             this.Team = new HashSet<TeamMember>();
 
         }

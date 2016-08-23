@@ -8,6 +8,7 @@ namespace Server.Pushs
 {
     public interface Push
     {
-         void Send();
+        void Send();
+        void AddToken(String Token);
     }
 }

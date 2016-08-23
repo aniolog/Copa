@@ -11,5 +11,11 @@ namespace Server.Pushs.Ios
         {
             throw new NotImplementedException();
         }
+
+
+        public void AddToken(string Token)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
