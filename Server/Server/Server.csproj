@@ -191,7 +191,13 @@
       <DependentUpon>FilterResources.resx</DependentUpon>
     </Compile>
     <Compile Include="Filters\DelegateAceptedRequest.cs" />
-    <Compile Include="Filters\JsonObject.cs" />
+    <Compile Include="Pushs\Ios\ApnMessage.cs" />
+    <Compile Include="Pushs\PushResources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>PushResources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="WebSockets\JsonObject.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -229,6 +235,7 @@
     <Compile Include="Persistences\ProviderPersistence.cs" />
     <Compile Include="Persistences\VehiclePersistence.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Pushs\GCM\GcmMessage.cs" />
     <Compile Include="Pushs\GCM\GCMPush.cs" />
     <Compile Include="Pushs\GCM\GCMResources.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -245,6 +252,12 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>RestResources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Threads\CrewMemberAcceptenceThread.cs" />
+    <Compile Include="Threads\ThreadResources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ThreadResources.resx</DependentUpon>
     </Compile>
     <Compile Include="Threads\UserConfirmationThread.cs" />
     <Compile Include="WebSockets\List\LogisticsWebSocketList.cs" />
@@ -277,9 +290,17 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>GCMResources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <EmbeddedResource Include="Pushs\PushResources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>PushResources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
     <EmbeddedResource Include="Rests\RestResources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>RestResources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Threads\ThreadResources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>ThreadResources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

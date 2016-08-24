@@ -13,9 +13,15 @@ namespace Server.Models
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public long Id { set; get; }
 
+
+        public bool IsAccepted { set; get; }
+
         public String CancelationReason { set; get; }
 
         public bool ProviderHasDeliver { set; get; }
+        
+        [Required]
+        public bool HasBeenNotified { set; get; }
 
         [Required] 
         public CrewMember Member { set; get; }

@@ -26,7 +26,9 @@ namespace Server.Filters
             DelegateAcceptedRequest,
             DelegateModifiedRequest,
             DelegateRegisterRequest,
-            DelegateRejectedRequest
+            DelegateRejectedRequest,
+            TeamMemberCanceldByInactivity,
+            RequestCancelByInactivity
         }
 
 

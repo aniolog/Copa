@@ -137,7 +137,7 @@ namespace Server.Models
         /// <summary>
         /// 
         /// </summary>
-        public ICollection<Device> Devices { get; set; }
+        public Device Device { get; set; }
 
         /// <summary>
         /// 
@@ -146,7 +146,6 @@ namespace Server.Models
         {
             this.ConfirmAccountId = "";
             this.ConfirmationLimit = DateTime.Now;
-            this.Devices = new HashSet<Device>();
         }
 
 

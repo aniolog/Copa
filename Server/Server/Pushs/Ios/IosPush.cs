@@ -7,11 +7,11 @@ namespace Server.Pushs.Ios
 {
     public class IosPush:Push
     {
-        public void Send()
+
+        public void Send(string Message)
         {
             throw new NotImplementedException();
         }
-
 
         public void AddToken(string Token)
         {

@@ -33,38 +33,17 @@ namespace Server.Persistences
         }
 
         public void AddDeviceToUser(Device NewDevice, User User) {
-
-            if (!(User.Devices.Contains(NewDevice))) {
-                User.Devices.Add(NewDevice);
+                User.Device = NewDevice;
                 CurrentContext.SaveChanges();
-            }
         }
 
-        public Boolean UserHasDevice(User User, String Token) {
-            foreach (Device _device in User.Devices)
-            {
 
-                if (_device.Token == Token) {
-                    return true;
-                }
-            }
-            return false;
-        }
 
 
 
         public void RemoveDeviceFromUser(Device Device, User User)
         {
-
-            if ((User.Devices.Contains(Device)))
-            {
-                User.Devices.Remove(Device);
-            }
-            if (Device.LogisticsDelegates.Count == 0) {
-                if (Device.CrewMembers.Count == 0) {
-                    CurrentContext.Devices.Remove(Device);
-                }
-            }
+            User.Device = null;
             CurrentContext.SaveChanges();
         }
 

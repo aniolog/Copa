@@ -15,12 +15,14 @@ namespace Server.Models
 
         public bool ProviderHasCanceld { set; get; }
 
-        public String ProviderHasCanceldReason { set; get; }
+        public String CancelReason { set; get; }
 
         [Required] 
         public DateTime RequestDate { set; get; }
 
         public Place Destination { set; get; }
+
+        public bool IsApproved { set; get; }
 
         public ICollection<RequestedVehicle> RequestedVehicles { set; get; }
 

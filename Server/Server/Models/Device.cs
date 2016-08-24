@@ -22,6 +22,7 @@ namespace Server.Models
 
         /// <summary>
         /// this attribute determines the push service that the device is associated with
+        /// false for Gcm and true for ios
         /// </summary>
         [Required] 
         public Boolean Type{set; get;}
@@ -29,27 +30,11 @@ namespace Server.Models
         /// <summary>
         /// 
         /// </summary>
-        public ICollection<CrewMember> CrewMembers{ set; get;}
+        [Required]
+        public DeviceLanguage Language { set; get; }    
 
-        /// <summary>
-        /// 
-        /// </summary>
-        public ICollection<LogisticsDelegate> LogisticsDelegates { set; get; }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        public ICollection<Provider> Providers { set; get; }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        public Device()
-        {
-            this.CrewMembers = new HashSet<CrewMember>();
-            this.LogisticsDelegates = new HashSet<LogisticsDelegate>();
-            this.Providers = new HashSet<Provider>();
+        public enum DeviceLanguage { 
+            en,es,br
         }
-
     }
 }

@@ -11,17 +11,7 @@ namespace Server.Controllers
     [RoutePrefix("api/requets")]
     public class RequestsController : ApiController
     {
-        // GET api/requests
-        public IEnumerable<string> Get()
-        {
-            return new string[] { "value1", "value2" };
-        }
 
-        // GET api/requests/5
-        public string Get(int id)
-        {
-            return "value";
-        }
 
         [Filters.CrewMemberRegisterRequest]
         [Authorize(Roles = "crewmember")]
@@ -32,9 +22,82 @@ namespace Server.Controllers
         
         
         }
-        
+
+        [Filters.CrewMemberModifiedRequest]
+        [Authorize(Roles = "crewmember")]
+        [Route("crewmember")]
+        [HttpPut]
+        public void CrewMemberModifiedRequest([FromBody] Models.Request value)
+        {
+            var dos = 1 + 1;
 
 
+        }
+
+        [Filters.CrewMemberAcceptedRequest]
+        [Authorize(Roles = "crewmember")]
+        [Route("crewmember/{RequestId}")]
+        [HttpGet]
+        public void CrewMemberAcceptedRequest([FromUri] long RequestId)
+        {
+            var dos = 1 + 1;
+
+
+        }
+
+        [Filters.CrewMemberRejectedRequest]
+        [Authorize(Roles = "crewmember")]
+        [Route("crewmember/{RequestId}")]
+        [HttpDelete]
+        public void CrewMemberDeletedRequest([FromUri] long RequestId)
+        {
+            var dos = 1 + 1;
+
+        }
+
+
+        [Filters.DelegateRegisterRequest]
+        [Authorize(Roles = "logisticdelegate")]
+        [Route("logisticdelegate")]
+        [HttpPost]
+        public void LogisticDelegateRegisterRequest([FromBody] Models.Request value)
+        {
+            var dos = 1 + 1;
+
+
+        }
+
+        [Filters.DelegateModifiedRequest]
+        [Authorize(Roles = "logisticdelegate")]
+        [Route("logisticdelegate")]
+        [HttpPut]
+        public void LogisticDelegateModifiedRequest([FromBody] Models.Request value)
+        {
+            var dos = 1 + 1;
+
+
+        }
+
+        [Filters.DelegateAceptedRequest]
+        [Authorize(Roles = "logisticdelegate")]
+        [Route("logisticdelegate/{RequestId}")]
+        [HttpGet]
+        public void LogisticDelegateAcceptedRequest([FromUri] long RequestId)
+        {
+            var dos = 1 + 1;
+
+
+        }
+
+        [Filters.DelegateRejectedRequest]
+        [Authorize(Roles = "logisticdelegate")]
+        [Route("logisticdelegate/{RequestId}")]
+        [HttpDelete]
+        public void LogisticDelegateDeletedRequest([FromUri] long RequestId)
+        {
+            var dos = 1 + 1;
+
+        }
 
 
 
