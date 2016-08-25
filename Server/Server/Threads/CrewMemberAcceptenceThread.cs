@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json;
 using Server.Filters;
 using Server.Models;
+using Server.WebSockets;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -62,30 +63,25 @@ namespace Server.Threads
                 #region Gcm Push message to logistics delegates
                 Pushs.Push _gcmPush = Pushs.PushFactory.GetGcmPushSender();
                 foreach(LogisticsDelegate _delegate in CurrentContext.LogisticDelegates){
-                    _gcmPush.AddToken(_delegate.Device.Token);
-                    
+                    _gcmPush.AddToken(_delegate.Device.Token); 
                 }
-
-                Pushs.GCM.GcmMessage _gcmMessage = new Pushs.GCM.GcmMessage();
-                _gcmMessage.title = JsonObject.ServerEvent.TeamMemberCanceldByInactivity.ToString();
-                _gcmMessage.data = this.TeamMember.Id.ToString();
-                _gcmPush.Send(JsonConvert.SerializeObject(_gcmMessage));
+                _gcmPush.SendToUser
+                    (JsonObject.ServerEvent.TeamMemberCanceldByInactivity.ToString()
+                    ,this.TeamMember.Id.ToString(),false);
                 #endregion
 
                 #region Push message to crewmember
                 Device  _memberDevice=TeamMember.Member.Device;
-                Pushs.Push _pushService = (!(_memberDevice.Type)) ?
-                    Pushs.PushFactory.GetGcmPushSender() :
-                    Pushs.PushFactory.GetIosPushSender();
+                Pushs.Push _pushService = 
+                    Pushs.PushFactory.GetPushService(_memberDevice.Type);
                 _pushService.AddToken(_memberDevice.Token);
-                String _message;
                 String _title;
 
-                if (_memberDevice.Language == Device.DeviceLanguage.en)
+                if (_memberDevice.Language == Device.DeviceLanguage.EN)
                 {
                     _title = Pushs.PushResources.TeamMemberInactivity_EN;
                 }
-                else if (_memberDevice.Language == Device.DeviceLanguage.es)
+                else if (_memberDevice.Language == Device.DeviceLanguage.ES)
                 {
                     _title = Pushs.PushResources.TeamMemberInactivity_ES;
                 }
@@ -93,22 +89,9 @@ namespace Server.Threads
                 {
                     _title = Pushs.PushResources.TeamMemberInactivity_BR;
                 }
-        
-                if (_memberDevice.Type)
-                {
-                    Pushs.GCM.GcmMessage _gcmMember = new Pushs.GCM.GcmMessage();
-                    _gcmMember.title = _title;
-                    _gcmMember.data = TeamMember.Id.ToString();
-                    _message = JsonConvert.SerializeObject(_gcmMember);
-                }
-                else {
-                    Pushs.Ios.ApnMessage _apnMember = new Pushs.Ios.ApnMessage();
-                    _apnMember.alert = _title;
-                    _apnMember.data = TeamMember.Id.ToString();
-                    _message = JsonConvert.SerializeObject(_apnMember);
-                }
 
-                _pushService.Send(_message);
+                _pushService.SendToUser(_title, TeamMember.Id.ToString(),_memberDevice.Type);
+
                 #endregion
             }
         }

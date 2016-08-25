@@ -90,6 +90,33 @@ namespace Server.Pushs {
         /// <summary>
         ///   Looks up a localized string similar to .
         /// </summary>
+        internal static string DelegateRegisterNewRequest_BR {
+            get {
+                return ResourceManager.GetString("DelegateRegisterNewRequest_BR", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string DelegateRegisterNewRequest_EN {
+            get {
+                return ResourceManager.GetString("DelegateRegisterNewRequest_EN", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string DelegateRegisterNewRequest_ES {
+            get {
+                return ResourceManager.GetString("DelegateRegisterNewRequest_ES", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
         internal static string TeamMemberInactivity_BR {
             get {
                 return ResourceManager.GetString("TeamMemberInactivity_BR", resourceCulture);

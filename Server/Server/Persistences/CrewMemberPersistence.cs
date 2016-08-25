@@ -162,7 +162,7 @@ namespace Server.Persistences
         /// </summary>
         /// <param name="CrewMemberId"></param>
         /// <returns>The crew member with the given id</returns>
-        public Models.CrewMember FindById(int CrewMemberId) {
+        public Models.CrewMember FindById(long CrewMemberId) {
             try
             {
                 return CurrentContext.CrewMembers.Find(CrewMemberId);

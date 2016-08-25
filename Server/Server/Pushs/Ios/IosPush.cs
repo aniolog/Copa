@@ -8,12 +8,12 @@ namespace Server.Pushs.Ios
     public class IosPush:Push
     {
 
-        public void Send(string Message)
+        public override void Send(string Message)
         {
             throw new NotImplementedException();
         }
 
-        public void AddToken(string Token)
+        public override void AddToken(string Token)
         {
             throw new NotImplementedException();
         }

@@ -67,16 +67,6 @@ namespace Server.Controllers
 
         }
 
-        [Filters.DelegateModifiedRequest]
-        [Authorize(Roles = "logisticdelegate")]
-        [Route("logisticdelegate")]
-        [HttpPut]
-        public void LogisticDelegateModifiedRequest([FromBody] Models.Request value)
-        {
-            var dos = 1 + 1;
-
-
-        }
 
         [Filters.DelegateAceptedRequest]
         [Authorize(Roles = "logisticdelegate")]

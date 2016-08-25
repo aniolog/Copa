@@ -51,28 +51,25 @@ namespace Server.Threads
 
                }
 
-               Pushs.GCM.GcmMessage _gcmMessage = new Pushs.GCM.GcmMessage();
-               _gcmMessage.title = JsonObject.ServerEvent.CrewMemberRejectedRequest.ToString();
-               _gcmMessage.data = Request.Id.ToString();
-               _gcmPush.Send(JsonConvert.SerializeObject(_gcmMessage));
+               _gcmPush.SendToUser
+                   (JsonObject.ServerEvent.TeamMemberCanceldByInactivity.ToString()
+                   ,Request.Id.ToString(), false);
                #endregion
 
 
                #region Push message to crewmember
                Device _memberDevice = 
                    Request.Team.First().Member.Device;
-               Pushs.Push _pushService = (!(_memberDevice.Type)) ?
-                   Pushs.PushFactory.GetGcmPushSender() :
-                   Pushs.PushFactory.GetIosPushSender();
+               Pushs.Push _pushService = 
+                   Pushs.PushFactory.GetPushService(_memberDevice.Type);
                _pushService.AddToken(_memberDevice.Token);
-               String _message;
                String _title;
 
-               if (_memberDevice.Language == Device.DeviceLanguage.en)
+               if (_memberDevice.Language == Device.DeviceLanguage.EN)
                {
                    _title = Pushs.PushResources.DelegateInactivity_EN;
                }
-               else if (_memberDevice.Language == Device.DeviceLanguage.es)
+               else if (_memberDevice.Language == Device.DeviceLanguage.ES)
                {
                    _title = Pushs.PushResources.DelegateInactivity_ES;
                }
@@ -80,23 +77,7 @@ namespace Server.Threads
                {
                    _title = Pushs.PushResources.DelegateInactivity_BR;
                }
-
-               if (_memberDevice.Type)
-               {
-                   Pushs.GCM.GcmMessage _gcmMember = new Pushs.GCM.GcmMessage();
-                   _gcmMember.title = _title;
-                   _gcmMember.data = Request.Id.ToString();
-                   _message = JsonConvert.SerializeObject(_gcmMember);
-               }
-               else
-               {
-                   Pushs.Ios.ApnMessage _apnMember = new Pushs.Ios.ApnMessage();
-                   _apnMember.alert = _title;
-                   _apnMember.data = Request.Id.ToString();
-                   _message = JsonConvert.SerializeObject(_apnMember);
-               }
-
-               _pushService.Send(_message);
+               _pushService.SendToUser(_title,Request.Id.ToString(),_memberDevice.Type);
                #endregion
 
 

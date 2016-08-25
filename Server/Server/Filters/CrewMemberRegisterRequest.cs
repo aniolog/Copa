@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using Server.WebSockets;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,18 +13,7 @@ namespace Server.Filters
     {
         public override void OnActionExecuted(HttpActionExecutedContext actionExecutedContext)
         {
-            Models.Request Object = 
-                (Models.Request)actionExecutedContext.ActionContext.ActionArguments["value"];
-            JsonObject _jsonMessage=new JsonObject();
-            _jsonMessage.Event =
-                Server.Filters.JsonObject.ServerEvent.CrewMemberRegistedRequest;
-            _jsonMessage.TriggerBy = "yo";
-
-            WebSockets.List.LogisticsWebSocketList.
-                BroadCast(JsonConvert.SerializeObject(_jsonMessage));
-            
-
-
+          
 
         }
     }

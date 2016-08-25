@@ -20,6 +20,7 @@ namespace Server.Models
         [Required] 
         public DateTime RequestDate { set; get; }
 
+        [Required]
         public Place Destination { set; get; }
 
         public bool IsApproved { set; get; }
@@ -28,7 +29,6 @@ namespace Server.Models
 
         public LogisticsDelegate CancelDelegate { set; get; }
 
-      
         public LogisticsDelegate RegisterDelegate { set; get; }
 
         public LogisticsDelegate ApproveDelegate { set; get; }

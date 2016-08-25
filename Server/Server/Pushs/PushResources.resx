@@ -126,6 +126,15 @@
   <data name="DelegateInactivity_ES" xml:space="preserve">
     <value />
   </data>
+  <data name="DelegateRegisterNewRequest_BR" xml:space="preserve">
+    <value />
+  </data>
+  <data name="DelegateRegisterNewRequest_EN" xml:space="preserve">
+    <value />
+  </data>
+  <data name="DelegateRegisterNewRequest_ES" xml:space="preserve">
+    <value />
+  </data>
   <data name="TeamMemberInactivity_BR" xml:space="preserve">
     <value />
   </data>

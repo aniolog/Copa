@@ -34,7 +34,7 @@ namespace Server.Models
         public DeviceLanguage Language { set; get; }    
 
         public enum DeviceLanguage { 
-            en,es,br
+            EN,ES,BR
         }
     }
 }

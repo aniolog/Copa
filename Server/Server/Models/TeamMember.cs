@@ -9,25 +9,52 @@ namespace Server.Models
 {
     public class TeamMember
     {
+        /// <summary>
+        /// 
+        /// </summary>
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public long Id { set; get; }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        [Required]
+        public float Lat{ set; get;}
 
+        /// <summary>
+        /// 
+        /// </summary>
+        [Required]
+        public float Long { set; get; }
+
+        /// <summary>
+        /// 
+        /// </summary>
         public bool IsAccepted { set; get; }
 
+        /// <summary>
+        /// 
+        /// </summary>
         public String CancelationReason { set; get; }
 
+        /// <summary>
+        /// 
+        /// </summary>
         public bool ProviderHasDeliver { set; get; }
         
-        [Required]
-        public bool HasBeenNotified { set; get; }
 
+        /// <summary>
+        /// 
+        /// </summary>
         [Required] 
         public CrewMember Member { set; get; }
 
+        /// <summary>   
+        /// 
+        /// </summary>
+        [Required]
+        public virtual Request Request { set; get; }
 
-        [Required] 
-        public Request Request { set; get; }
     }
 }

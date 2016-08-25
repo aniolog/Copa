@@ -7,6 +7,18 @@ namespace Server.Pushs
 {
     public class PushFactory
     {
+
+        public static Push GetPushService(Boolean DeviceType) {
+
+            if (!(DeviceType))
+            {
+                return new GCM.GCMPush();
+            }
+            return new Pushs.Ios.IosPush();
+       
+        
+        }
+
         public static Push GetGcmPushSender() {
             return new GCM.GCMPush();
         }

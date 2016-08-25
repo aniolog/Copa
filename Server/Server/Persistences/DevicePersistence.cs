@@ -39,11 +39,10 @@ namespace Server.Persistences
 
 
 
-
-
         public void RemoveDeviceFromUser(Device Device, User User)
         {
             User.Device = null;
+            CurrentContext.Devices.Remove(Device);
             CurrentContext.SaveChanges();
         }
 
