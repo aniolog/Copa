@@ -18,7 +18,9 @@ namespace Server.Controllers
         [Route("crewmember")]
         [HttpPost]
         public void CrewMemberRegisterRequest([FromBody] Models.Request value) {
-            var dos = 1 + 1;
+            int Id = int.Parse(RequestContext.Principal.Identity.Name);
+            Logics.RequestLogic _logic = new Logics.RequestLogic();
+            _logic.CrewMemberRegisterRequest(Id,value);
         
         
         }

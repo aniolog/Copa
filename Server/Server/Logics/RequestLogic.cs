@@ -21,14 +21,13 @@ namespace Server.Logics
             this.CrewMemberPersistence = 
                 new Persistences.CrewMemberPersistence(this.CurrentContext);
             this.RequestPersistence = new Persistences.RequestPersistence(this.CurrentContext);
-
         }
 
 
         public void DelegateRegisterRequest(int DelegateId,Models.Request NewRequest) {
             NewRequest.Id = 0;
 
-            if (NewRequest.RequestDate < DateTime.Now) {
+            if (NewRequest.RequestDate < DateTime.Now.AddHours(1)) {
                 throw new Exception("Invalid Date");
             }
             if (NewRequest.Team.Any() == false)
@@ -96,7 +95,7 @@ namespace Server.Logics
            
                 NewRequest.Id = 0;
 
-                if (NewRequest.RequestDate < DateTime.Now)
+                if (NewRequest.RequestDate < DateTime.Now.AddHours(1))
                 {
                     throw new Exception("Invalid Date");
                 }
@@ -113,6 +112,8 @@ namespace Server.Logics
 
                 Models.TeamMember _teamMember = NewRequest.Team.First();
                 _teamMember.Member = _crewMember;
+                _teamMember.IsAccepted = true;
+                _teamMember.CancelationReason = null;
 
                 NewRequest.RegisterDelegate = null;
                 NewRequest.ApproveDelegate = null;
@@ -125,7 +126,7 @@ namespace Server.Logics
                 JsonObject _jsonMessage = new JsonObject();
                 _jsonMessage.Event = JsonObject.ServerEvent.CrewMemberRegistedRequest;
                 _jsonMessage.TriggerBy = _crewMember.Id.ToString();
-                _jsonMessage.Data = "";
+                _jsonMessage.Data =JsonConvert.SerializeObject(NewRequest) ;
                 WebSockets.List.LogisticsWebSocketList.BroadCast(JsonConvert.SerializeObject(_jsonMessage));
                 #endregion
 

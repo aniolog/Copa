@@ -21,7 +21,10 @@ namespace Server.Models
         public DateTime RequestDate { set; get; }
 
         [Required]
-        public Place Destination { set; get; }
+        public float Lat;
+
+        [Required]
+        public float Long;
 
         public bool IsApproved { set; get; }
 
