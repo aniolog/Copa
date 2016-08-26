@@ -6,12 +6,8 @@ using System.Web;
 
 namespace Server.Persistences
 {
-    public class VehiclePersistence
+    public class VehiclePersistence:BasePersistence
     {
-        /// <summary>
-        /// The Curent database context
-        /// </summary>
-        private  Models.Context CurrentContext;
 
         public VehiclePersistence(Models.Context CurrentContext)
         {

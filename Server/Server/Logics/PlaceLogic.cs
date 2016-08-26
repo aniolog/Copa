@@ -20,9 +20,6 @@ namespace Server.Logics
 
         public void AddPlace(int MemberId, Place NewPlace) {
             CrewMember _currentMember = this.MemberPersistence.FindById(MemberId);
-            if (_currentMember==null) {
-                throw new Exception("Member not found");
-            }
             if (NewPlace.Name == null) {
                 throw new Exception("Invalid place name");
             }
@@ -43,11 +40,7 @@ namespace Server.Logics
         public void UpdatePlace(Place UpdatedPlace, int MemberId) {
             CrewMember _currentMember = this.MemberPersistence.FindById(MemberId);
             Place _updatedPlace = this.PlacePersistence.FindById(UpdatedPlace.Id);
-            if (!(_currentMember.Places.Contains(_updatedPlace)))
-            {
-                throw new Exception("PlaceNotFound");
-            }
-              if (UpdatedPlace.Name == null) {
+            if (UpdatedPlace.Name == null) {
                 throw new Exception("Invalid place name");
             }
             _updatedPlace.Lat = UpdatedPlace.Lat;

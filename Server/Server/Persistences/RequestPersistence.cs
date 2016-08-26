@@ -5,17 +5,29 @@ using System.Web;
 
 namespace Server.Persistences
 {
-    public class RequestPersistence
+    public class RequestPersistence:BasePersistence
     {
-        /// <summary>
-        /// The Curent database context
-        /// </summary>
-        private Models.Context CurrentContext;
+    
 
         public RequestPersistence(Models.Context CurrentContext)
         {
             this.CurrentContext = CurrentContext;
         }
+
+
+
+        public Models.Request FindById(long RequestId) {
+
+            try
+            {
+               return this.CurrentContext.Requests.Find(RequestId);
+            }
+            catch (Exception E) {
+                throw new Exception("RequestNotFound");
+            }
+        
+        }
+
 
         public Models.Request AddOrUpdateRequest(Models.Request Request)
         {

@@ -10,7 +10,6 @@ namespace Server.Logics
     {
 
         private Persistences.ProviderPersistence ProviderPersistence;
-
         private Persistences.VehiclePersistence VehiclePersistence;
 
         public ProviderLogic():base()
@@ -18,7 +17,6 @@ namespace Server.Logics
             this.ProviderPersistence = new Persistences.ProviderPersistence(this.CurrentContext);
             this.VehiclePersistence = new Persistences.VehiclePersistence(this.CurrentContext);
         }
-
 
         public void AddProvider(Models.Provider NewProvider) {
 

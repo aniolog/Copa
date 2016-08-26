@@ -5,13 +5,9 @@ using System.Web;
 
 namespace Server.Persistences
 {
-    public class CrewMemberPersistence
+    public class CrewMemberPersistence:BasePersistence
     {
-        /// <summary>
-        /// The Curent database context
-        /// </summary>
-        private Models.Context CurrentContext;
-
+       
 
         public CrewMemberPersistence(Models.Context CurrentContext)
         {
@@ -168,7 +164,7 @@ namespace Server.Persistences
                 return CurrentContext.CrewMembers.Find(CrewMemberId);
             }
             catch (Exception E) {
-                return null;
+                throw new Exception("Crew member not found");
             }
         }
 

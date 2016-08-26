@@ -5,12 +5,9 @@ using System.Web;
 
 namespace Server.Persistences
 {
-    public class LogisticsDelegatePersistence
+    public class LogisticsDelegatePersistence:BasePersistence
     {
-        // <summary>
-        /// The Curent database context
-        /// </summary>
-        private  Models.Context CurrentContext ;
+        
 
         public LogisticsDelegatePersistence(Models.Context CurrentContext)
         {
@@ -35,7 +32,7 @@ namespace Server.Persistences
             }
             catch (System.InvalidOperationException E)
             {
-                return null;
+                throw new Exception("Delegate not found");
             }
         }
 
@@ -59,7 +56,7 @@ namespace Server.Persistences
             catch (System.InvalidOperationException E)
             {
 
-                return null;
+                throw new Exception("Delegate not found");
 
             }
         }
@@ -83,7 +80,7 @@ namespace Server.Persistences
             catch (System.InvalidOperationException E)
             {
 
-                return null;
+                throw new Exception("Delegate not found");
 
             }
         }
@@ -106,7 +103,7 @@ namespace Server.Persistences
             }
             catch (System.InvalidOperationException E)
             {
-                return null;
+                throw new Exception("Delegate not found");
             }
         }
 
@@ -149,9 +146,15 @@ namespace Server.Persistences
         /// </summary>
         /// <param name="LogisticsDelegateId"></param>
         /// <returns>The logistics delegate with the given id</returns>
-        public Models.LogisticsDelegate FindById(int LogisticsDelegateId)
+        public Models.LogisticsDelegate FindById(long LogisticsDelegateId)
         {
-            return CurrentContext.LogisticDelegates.Find(LogisticsDelegateId);
+            try
+            {
+                return CurrentContext.LogisticDelegates.Find(LogisticsDelegateId);
+            }
+            catch (Exception E) {
+                throw new Exception("Delegate not found");
+            }
         }
 
         /// <summary>

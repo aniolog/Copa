@@ -21,10 +21,10 @@ namespace Server.Models
         public DateTime RequestDate { set; get; }
 
         [Required]
-        public float Lat;
+        public float Lat { set; get; }
 
         [Required]
-        public float Long;
+        public float Long { set; get; }
 
         public bool IsApproved { set; get; }
 
@@ -37,6 +37,8 @@ namespace Server.Models
         public LogisticsDelegate ApproveDelegate { set; get; }
 
         public ICollection<TeamMember> Team { set; get; }
+
+        public Provider? Provider { set; get; }
 
         public Request()
         {

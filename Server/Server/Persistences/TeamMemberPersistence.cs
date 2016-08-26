@@ -5,12 +5,8 @@ using System.Web;
 
 namespace Server.Persistences
 {
-    public class TeamMemberPersistence
+    public class TeamMemberPersistence:BasePersistence
     {
-        /// <summary>
-        /// The Curent database context
-        /// </summary>
-        private Models.Context CurrentContext;
 
         public TeamMemberPersistence(Models.Context CurrentContext)
         {
@@ -26,8 +22,26 @@ namespace Server.Persistences
             }
             catch(System.InvalidOperationException E)
             {
-                return null;
+                throw new Exception("Team member not found");
             }
+        }
+
+        public Models.TeamMember AddOrUpdateRequest(Models.TeamMember TeamMember)
+        {
+            if (TeamMember.Id == 0)
+            {
+                CurrentContext.TeamMembers.Add(TeamMember);
+                CurrentContext.SaveChanges();
+                CurrentContext.Entry(TeamMember).GetDatabaseValues();
+            }
+            else
+            {
+                CurrentContext.SaveChanges();
+
+
+            }
+            return TeamMember;
+
         }
     }
 }

@@ -40,10 +40,6 @@ namespace Server.Logics
                 this.LogisticDelegatePersistence
                 .FindLogisticsDelegateByConfirmationId(ConfirmationId);
 
-            if (_confirmedLogisticDelegate == null)
-            {
-                throw new Exception("No exite");
-            }
 
             if (DateTime.Now > _confirmedLogisticDelegate.ConfirmationLimit)
             {
@@ -59,11 +55,6 @@ namespace Server.Logics
         {
             Models.LogisticsDelegate _requestResetPasswordLogisticDelegate =
                 this.LogisticDelegatePersistence.FindLogisticsDelegateByEmail(Email);
-            if (_requestResetPasswordLogisticDelegate == null)
-            {
-                throw new Exception("No exite");
-            }
-
             _requestResetPasswordLogisticDelegate.ResetPasswordId = "";
             _requestResetPasswordLogisticDelegate.ResetPasswordLimit = DateTime.Now;
             this.LogisticDelegatePersistence.
@@ -79,10 +70,6 @@ namespace Server.Logics
             Models.LogisticsDelegate _resetPasswordDelegate =
                 this.LogisticDelegatePersistence.FindLogisticsDelegateByResetPassworId(ResetPasswordId);
 
-            if (_resetPasswordDelegate == null)
-            {
-                throw new Exception("No exite");
-            }
 
             if (DateTime.Now > _resetPasswordDelegate.ResetPasswordLimit)
             {
@@ -99,10 +86,6 @@ namespace Server.Logics
         {
             Models.LogisticsDelegate _updateLogisticDelegate =
                  this.LogisticDelegatePersistence.FindById(id);
-            if (_updateLogisticDelegate == null)
-            {
-                throw new Exception("No exite");
-            }
             if (Data.Name == null)
             {
                 throw new Exception("Nombre no puede ser null");

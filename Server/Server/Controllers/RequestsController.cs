@@ -13,81 +13,82 @@ namespace Server.Controllers
     {
 
 
-        [Filters.CrewMemberRegisterRequest]
         [Authorize(Roles = "crewmember")]
         [Route("crewmember")]
         [HttpPost]
         public void CrewMemberRegisterRequest([FromBody] Models.Request value) {
-            int Id = int.Parse(RequestContext.Principal.Identity.Name);
+            long Id = long.Parse(RequestContext.Principal.Identity.Name);
             Logics.RequestLogic _logic = new Logics.RequestLogic();
             _logic.CrewMemberRegisterRequest(Id,value);
         
         
         }
 
-        [Filters.CrewMemberModifiedRequest]
         [Authorize(Roles = "crewmember")]
-        [Route("crewmember")]
+        [Route("crewmember/{TeamMemberId}")]
         [HttpPut]
-        public void CrewMemberModifiedRequest([FromBody] Models.Request value)
+        public void CrewMemberModifiedRequest([FromUri] long TeamMemberId,
+            [FromBody] Models.TeamMember value)
         {
-            var dos = 1 + 1;
+            long Id = long.Parse(RequestContext.Principal.Identity.Name);
+            Logics.RequestLogic _logic = new Logics.RequestLogic();
+            _logic.CrewMemberModifyRequest(TeamMemberId, Id, value);
 
 
         }
 
-        [Filters.CrewMemberAcceptedRequest]
         [Authorize(Roles = "crewmember")]
-        [Route("crewmember/{RequestId}")]
+        [Route("crewmember/{TeamMemberId}")]
         [HttpGet]
-        public void CrewMemberAcceptedRequest([FromUri] long RequestId)
+        public void CrewMemberAcceptedRequest([FromUri] long TeamMemberId)
         {
             var dos = 1 + 1;
 
 
         }
 
-        [Filters.CrewMemberRejectedRequest]
         [Authorize(Roles = "crewmember")]
-        [Route("crewmember/{RequestId}")]
+        [Route("crewmember/{TeamMemberId}")]
         [HttpDelete]
-        public void CrewMemberDeletedRequest([FromUri] long RequestId)
+        public void CrewMemberCancelRequest([FromUri] long TeamMemberId)
         {
             var dos = 1 + 1;
 
         }
 
-
-        [Filters.DelegateRegisterRequest]
         [Authorize(Roles = "logisticdelegate")]
         [Route("logisticdelegate")]
         [HttpPost]
         public void LogisticDelegateRegisterRequest([FromBody] Models.Request value)
         {
-            var dos = 1 + 1;
+            int Id = int.Parse(RequestContext.Principal.Identity.Name);
+            Logics.RequestLogic _logic = new Logics.RequestLogic();
+            _logic.DelegateRegisterRequest(Id, value);
+        
 
 
         }
 
-
-        [Filters.DelegateAceptedRequest]
         [Authorize(Roles = "logisticdelegate")]
-        [Route("logisticdelegate/{RequestId}")]
+        [Route("logisticdelegate/{RequestId}/{ProviderId}")]
         [HttpGet]
-        public void LogisticDelegateAcceptedRequest([FromUri] long RequestId)
+        public void LogisticDelegateAcceptedRequest([FromUri] long RequestId,
+            [FromUri] long ProviderId)
         {
-            var dos = 1 + 1;
-
-
+            long Id = long.Parse(RequestContext.Principal.Identity.Name);
+            Logics.RequestLogic _logic = new Logics.RequestLogic();
+            _logic.DelegateAcceptRequest(RequestId, Id,ProviderId);
         }
 
-        [Filters.DelegateRejectedRequest]
+
         [Authorize(Roles = "logisticdelegate")]
         [Route("logisticdelegate/{RequestId}")]
         [HttpDelete]
-        public void LogisticDelegateDeletedRequest([FromUri] long RequestId)
+        public void LogisticDelegateCancelRequest([FromUri] long RequestId)
         {
-            var dos = 1 + 1;
+            long Id = long.Parse(RequestContext.Principal.Identity.Name);
+            Logics.RequestLogic _logic = new Logics.RequestLogic();
+            _logic.DelegateRejectRequest(RequestId, Id);
 
         }
 

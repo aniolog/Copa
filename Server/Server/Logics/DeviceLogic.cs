@@ -68,9 +68,6 @@ namespace Server.Logics
             }
             this.DevicePersistence = new Persistences.DevicePersistence(this.CurrentContext);
             Device _device = this.DevicePersistence.FindByToken(DeviceToken);
-            if (_device == null) {
-                throw new Exception("No existe");
-            }
             this.DevicePersistence.RemoveDeviceFromUser(_device, User);
 
         }

@@ -192,6 +192,7 @@
     </Compile>
     <Compile Include="Filters\DelegateAceptedRequest.cs" />
     <Compile Include="Logics\RequestLogic.cs" />
+    <Compile Include="Persistences\BasePersistence.cs" />
     <Compile Include="Persistences\RequestPersistence.cs" />
     <Compile Include="Persistences\TeamMemberPersistence.cs" />
     <Compile Include="Pushs\Ios\ApnMessage.cs" />

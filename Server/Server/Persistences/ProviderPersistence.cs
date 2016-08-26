@@ -5,12 +5,8 @@ using System.Web;
 
 namespace Server.Persistences
 {
-    public class ProviderPersistence
+    public class ProviderPersistence:BasePersistence
     {
-         /// <summary>
-        /// The Curent database context
-        /// </summary>
-        private Models.Context CurrentContext;
 
         public ProviderPersistence(Models.Context CurrentContext)
         {
@@ -61,7 +57,7 @@ namespace Server.Persistences
             }
             catch (Exception E)
             {
-                return null;
+                throw new Exception("Provider not found");
             }
         
         }

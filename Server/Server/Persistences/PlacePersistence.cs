@@ -6,12 +6,9 @@ using System.Web;
 
 namespace Server.Persistences
 {
-    public class PlacePersistence
+    public class PlacePersistence:BasePersistence
     {
-        /// <summary>
-        /// The Curent database context
-        /// </summary>
-        private  Models.Context CurrentContext;
+   
 
         public PlacePersistence(Models.Context CurrentContext)
         {
@@ -42,7 +39,7 @@ namespace Server.Persistences
                 return CurrentContext.Places.Find(PlaceId);
             }
             catch (Exception E) {
-                return null;
+                throw new Exception("PlaceNotFound");
             }
         }
 

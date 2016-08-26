@@ -31,7 +31,7 @@ namespace Server.Models
         /// <summary>
         /// 
         /// </summary>
-        public bool IsAccepted { set; get; }
+        public bool? IsAccepted { set; get; }
 
         /// <summary>
         /// 
@@ -56,5 +56,9 @@ namespace Server.Models
         [Required]
         public virtual Request Request { set; get; }
 
+        public TeamMember()
+        {
+            this.IsAccepted = null;
+        }
     }
 }

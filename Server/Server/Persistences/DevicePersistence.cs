@@ -6,9 +6,8 @@ using System.Web;
 
 namespace Server.Persistences
 {
-    public class DevicePersistence
+    public class DevicePersistence:BasePersistence
     {
-        private  Models.Context CurrentContext;
 
         public DevicePersistence(Models.Context CurrentContext)
         {
@@ -27,7 +26,7 @@ namespace Server.Persistences
             }
             catch(System.InvalidOperationException)
             {
-                return null;
+                throw new Exception("Device not found");
 
             }
         }
