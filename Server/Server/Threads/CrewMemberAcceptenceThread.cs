@@ -43,7 +43,7 @@ namespace Server.Threads
         /// </summary>
         private void Start(){
             System.Threading.Thread.Sleep(5 * 60 * 1000);
-            if (!(TeamMember.IsAccepted)) {
+            if (TeamMember.IsAccepted==false) {
 
 
                 TeamMember.IsAccepted = false;

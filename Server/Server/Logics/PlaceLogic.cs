@@ -19,39 +19,78 @@ namespace Server.Logics
         }
 
         public void AddPlace(int MemberId, Place NewPlace) {
-            CrewMember _currentMember = this.MemberPersistence.FindById(MemberId);
-            if (NewPlace.Name == null) {
-                throw new Exception("Invalid place name");
+            try
+            {
+                CrewMember _currentMember = this.MemberPersistence.FindById(MemberId);
+
+                if (NewPlace.Name == null)
+                {
+                    throw new Exception("Invalid place name");
+                }
+                this.PlacePersistence.UpdateOrAddPlace(NewPlace, _currentMember);
             }
-            this.PlacePersistence.UpdateOrAddPlace(NewPlace,_currentMember);
+            catch (Exceptions.CrewMemberNotFoundException E)
+            {
+                throw E;
+            }
+            catch (Exception E)
+            {
+                throw E;
+            }
         
         }
 
         public void DeletePlace(int PlaceId,int MemberId) {
-            CrewMember _currentMember = this.MemberPersistence.FindById(MemberId);
-            Place _deletedPlace = this.PlacePersistence.FindById(PlaceId);
-            if (!(_currentMember.Places.Contains(_deletedPlace))) {
-                throw new Exception("CrewMemberDoesNotOwnPlace");
+            try{
+                CrewMember _currentMember = this.MemberPersistence.FindById(MemberId);
+                Place _deletedPlace = this.PlacePersistence.FindById(PlaceId);
+                if (!(_currentMember.Places.Contains(_deletedPlace))) {
+                    throw new Exception("CrewMemberDoesNotOwnPlace");
+                }
+                this.PlacePersistence.DeletePlace(_deletedPlace);
             }
-            this.PlacePersistence.DeletePlace(_deletedPlace);
+
+            catch (Exception E)
+            {
+                throw E;
+            }
 
         }
 
         public void UpdatePlace(Place UpdatedPlace, int MemberId) {
-            CrewMember _currentMember = this.MemberPersistence.FindById(MemberId);
-            Place _updatedPlace = this.PlacePersistence.FindById(UpdatedPlace.Id);
-            if (UpdatedPlace.Name == null) {
-                throw new Exception("Invalid place name");
+            try
+            {
+                CrewMember _currentMember = this.MemberPersistence.FindById(MemberId);
+                Place _updatedPlace = this.PlacePersistence.FindById(UpdatedPlace.Id);
+                if (UpdatedPlace.Name == null)
+                {
+                    throw new Exception("Invalid place name");
+                }
+                _updatedPlace.Lat = UpdatedPlace.Lat;
+                _updatedPlace.Long = UpdatedPlace.Long;
+                _updatedPlace.Name = UpdatedPlace.Name;
+                this.PlacePersistence.UpdateOrAddPlace(_updatedPlace, _currentMember);
             }
-            _updatedPlace.Lat = UpdatedPlace.Lat;
-            _updatedPlace.Long = UpdatedPlace.Long;
-            _updatedPlace.Name = UpdatedPlace.Name;
-            this.PlacePersistence.UpdateOrAddPlace(_updatedPlace,_currentMember);
+            catch (Exception E)
+            {
+                throw E;
+            }
         }
 
         public List<Models.Place> FindPlaces(int MemberId) {
-            CrewMember _currentMember = this.MemberPersistence.FindById(MemberId);
-            return _currentMember.Places.ToList();
+            try
+            {
+                CrewMember _currentMember = this.MemberPersistence.FindById(MemberId);
+                return _currentMember.Places.ToList();
+            }
+            catch (Exceptions.CrewMemberNotFoundException E)
+            {
+                throw E;
+            }
+            catch (Exception E)
+            {
+                throw E;
+            }
         }
     }
 }

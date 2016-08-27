@@ -38,7 +38,7 @@ namespace Server.Models
 
         public ICollection<TeamMember> Team { set; get; }
 
-        public Provider? Provider { set; get; }
+        public Provider Provider { set; get; }
 
         public Request()
         {

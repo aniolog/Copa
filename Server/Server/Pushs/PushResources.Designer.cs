@@ -63,6 +63,33 @@ namespace Server.Pushs {
         /// <summary>
         ///   Looks up a localized string similar to .
         /// </summary>
+        internal static string DelegateAcceptedRequest_BR {
+            get {
+                return ResourceManager.GetString("DelegateAcceptedRequest_BR", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string DelegateAcceptedRequest_EN {
+            get {
+                return ResourceManager.GetString("DelegateAcceptedRequest_EN", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string DelegateAcceptedRequest_ES {
+            get {
+                return ResourceManager.GetString("DelegateAcceptedRequest_ES", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
         internal static string DelegateInactivity_BR {
             get {
                 return ResourceManager.GetString("DelegateInactivity_BR", resourceCulture);
@@ -111,6 +138,33 @@ namespace Server.Pushs {
         internal static string DelegateRegisterNewRequest_ES {
             get {
                 return ResourceManager.GetString("DelegateRegisterNewRequest_ES", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string DelegateRejectedRequest_BR {
+            get {
+                return ResourceManager.GetString("DelegateRejectedRequest_BR", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string DelegateRejectedRequest_EN {
+            get {
+                return ResourceManager.GetString("DelegateRejectedRequest_EN", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string DelegateRejectedRequest_ES {
+            get {
+                return ResourceManager.GetString("DelegateRejectedRequest_ES", resourceCulture);
             }
         }
         

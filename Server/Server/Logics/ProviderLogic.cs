@@ -40,32 +40,39 @@ namespace Server.Logics
 
         public void UpdateProvider(long Id,Models.Provider ExistingProvider)
         {
-
-            Models.Provider _provider =
-                this.ProviderPersistence.FindById(Id);
-            if (_provider == null)
+            try
             {
-                throw new Exception("existe");
-            }
-            _provider.Name = ExistingProvider.Name;
-            _provider.Telephone = ExistingProvider.Telephone;
-            _provider.ContactName = ExistingProvider.ContactName;
-            List<Vehicle> _vehicles = new List<Vehicle>();
-            foreach (Vehicle _loopVehicle in ExistingProvider.Vehicles)
-            {
+                Models.Provider _provider =
+                    this.ProviderPersistence.FindById(Id);
+                _provider.Name = ExistingProvider.Name;
+                _provider.Telephone = ExistingProvider.Telephone;
+                _provider.ContactName = ExistingProvider.ContactName;
+                List<Vehicle> _vehicles = new List<Vehicle>();
+                foreach (Vehicle _loopVehicle in ExistingProvider.Vehicles)
+                {
 
-                Vehicle _selectedVehicle =
-                    this.VehiclePersistence.FindByType(_loopVehicle.Type);
-                _vehicles.Add((_selectedVehicle == null) ? _loopVehicle : _selectedVehicle);
+                    Vehicle _selectedVehicle =
+                        this.VehiclePersistence.FindByType(_loopVehicle.Type);
+                    _vehicles.Add((_selectedVehicle == null) ? _loopVehicle : _selectedVehicle);
 
+                }
+                _provider.Vehicles = _vehicles;
+                this.ProviderPersistence.AddOrUpdateProvider(_provider);
             }
-            _provider.Vehicles = _vehicles;
-            this.ProviderPersistence.AddOrUpdateProvider(_provider);
+            catch (Exception E) {
+                throw E;
+            }
 
         }
 
         public Models.Provider FindProvider(long Id) {
-            return this.ProviderPersistence.FindById(Id);
+            try
+            {
+                return this.ProviderPersistence.FindById(Id);
+            }
+            catch (Exception E) {
+                throw E;
+            }
         }
 
         public IQueryable<Models.Provider> GetProviders() {

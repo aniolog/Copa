@@ -23,7 +23,7 @@ namespace Server.Persistences
                return this.CurrentContext.Requests.Find(RequestId);
             }
             catch (Exception E) {
-                throw new Exception("RequestNotFound");
+                return null;
             }
         
         }

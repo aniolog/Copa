@@ -19,24 +19,52 @@ namespace Server.Logics
 
 
         public void AddDeviceToCrewMember(Device Device, int CrewMemberId) {
-            this.CrewMemberPersistence = new Persistences.CrewMemberPersistence(this.CurrentContext);
-            CrewMember _crewMember = this.CrewMemberPersistence.FindById(CrewMemberId);
-            this.AddDeviceToUser(_crewMember,Device);
+            try
+            {
+                this.CrewMemberPersistence = new Persistences.CrewMemberPersistence(this.CurrentContext);
+                CrewMember _crewMember = this.CrewMemberPersistence.FindById(CrewMemberId);
+                this.AddDeviceToUser(_crewMember, Device);
+            }
+            catch (Exceptions.CrewMemberNotFoundException E)
+            {
+                throw E;
+            }
+            catch (Exception E)
+            {
+                throw E;
+            }
         }
 
         public void DeleteDeviceFromCrewMember(String DeviceToken, int CrewMemberId) {
-            this.CrewMemberPersistence = new Persistences.CrewMemberPersistence(this.CurrentContext);
-            CrewMember _crewMember = this.CrewMemberPersistence.FindById(CrewMemberId);
-            this.DeleteDeviceFromUser(_crewMember,DeviceToken);
+            try
+            {
+                this.CrewMemberPersistence = new Persistences.CrewMemberPersistence(this.CurrentContext);
+                CrewMember _crewMember = this.CrewMemberPersistence.FindById(CrewMemberId);
+                this.DeleteDeviceFromUser(_crewMember, DeviceToken);
+            }
+            catch (Exceptions.CrewMemberNotFoundException E)
+            {
+                throw E;
+            }
+            catch (Exception E)
+            {
+                throw E;
+            }
         }
 
 
         public void AddDeviceToLogisticDelegate(Device Device, int LogisticDelegareId)
         {
-            this.LogisticsDelegatePersistence = new Persistences.LogisticsDelegatePersistence(this.CurrentContext);
-            LogisticsDelegate _logisticDelegate = 
-                this.LogisticsDelegatePersistence.FindById(LogisticDelegareId);
-            this.AddDeviceToUser(_logisticDelegate, Device);
+            try
+            {
+                this.LogisticsDelegatePersistence = new Persistences.LogisticsDelegatePersistence(this.CurrentContext);
+                LogisticsDelegate _logisticDelegate =
+                    this.LogisticsDelegatePersistence.FindById(LogisticDelegareId);
+                this.AddDeviceToUser(_logisticDelegate, Device);
+            }
+            catch (Exception E) {
+                throw E;
+            }
         }
 
         public void DeleteDeviceFromLogisticDelegate(String DeviceToken, int LogisticDelegareId)
@@ -50,25 +78,39 @@ namespace Server.Logics
 
 
         private void AddDeviceToUser(User User, Device Device){
-            if (String.IsNullOrEmpty(Device.Token)) {
-                throw new Exception("Invalid Token");
+            try
+            {
+                if (String.IsNullOrEmpty(Device.Token))
+                {
+                    throw new Exceptions.InvalidTokenException();
+                }
+                this.DevicePersistence = new Persistences.DevicePersistence(this.CurrentContext);
+                Device _device = this.DevicePersistence.FindByToken(Device.Token);
+                Device = (_device == null) ? Device : _device;
+                this.DevicePersistence.AddDeviceToUser(Device, User);
             }
-            this.DevicePersistence = new Persistences.DevicePersistence(this.CurrentContext);
-            Device _device = this.DevicePersistence.FindByToken(Device.Token);
-            Device = (_device == null) ? Device : _device;
-            this.DevicePersistence.AddDeviceToUser(Device, User);
+            catch (Exception E) {
+                throw E;
+            }
             
         }
 
         private void DeleteDeviceFromUser(User User, String DeviceToken)
         {
-            if (String.IsNullOrEmpty(DeviceToken))
+            try
             {
-                throw new Exception("Invalid Token");
+                if (String.IsNullOrEmpty(DeviceToken))
+                {
+                    throw new Exceptions.InvalidTokenException();
+                }
+                this.DevicePersistence = new Persistences.DevicePersistence(this.CurrentContext);
+                Device _device = this.DevicePersistence.FindByToken(DeviceToken);
+                this.DevicePersistence.RemoveDeviceFromUser(_device, User);
             }
-            this.DevicePersistence = new Persistences.DevicePersistence(this.CurrentContext);
-            Device _device = this.DevicePersistence.FindByToken(DeviceToken);
-            this.DevicePersistence.RemoveDeviceFromUser(_device, User);
+            catch (Exception E)
+            {
+                throw E;
+            }
 
         }
 

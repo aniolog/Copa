@@ -37,12 +37,24 @@ namespace Server.Persistences
         }
 
         public IQueryable<Models.Provider> FindProviders(){
-            return CurrentContext.Providers;
+            try
+            {
+                return CurrentContext.Providers;
+            }
+            catch (Exception E) {
+                return null;
+            }
         }
 
 
         public Models.Provider FindById(long Id){
-            return CurrentContext.Providers.Find(Id);
+            try
+            {
+                return CurrentContext.Providers.Find(Id);
+            }
+            catch (Exception E) {
+                throw new Exceptions.ProviderNotFoundException();
+            }
         
         }
 
@@ -57,7 +69,7 @@ namespace Server.Persistences
             }
             catch (Exception E)
             {
-                throw new Exception("Provider not found");
+                return null;
             }
         
         }

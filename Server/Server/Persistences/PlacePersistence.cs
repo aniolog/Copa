@@ -39,7 +39,7 @@ namespace Server.Persistences
                 return CurrentContext.Places.Find(PlaceId);
             }
             catch (Exception E) {
-                throw new Exception("PlaceNotFound");
+                throw new Exceptions.PlaceNotFoundException();
             }
         }
 
@@ -48,7 +48,8 @@ namespace Server.Persistences
             {
                 return CurrentContext.Places;
             }
-            catch (Exception E) {
+            catch (Exception E) 
+            {
                 return null;
             }
         }

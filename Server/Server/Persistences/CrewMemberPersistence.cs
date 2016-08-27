@@ -32,7 +32,7 @@ namespace Server.Persistences
             catch (System.InvalidOperationException E)
             {
 
-                return null;
+                throw new Exceptions.CrewMemberNotFoundException();
 
             }
         }
@@ -56,7 +56,7 @@ namespace Server.Persistences
             catch (System.InvalidOperationException E)
             {
 
-                return null;
+                throw new Exceptions.CrewMemberNotFoundException();
 
             }
         }
@@ -82,27 +82,6 @@ namespace Server.Persistences
 
                 return null;
 
-            }
-        }
-
-        /// <summary>
-        /// Finds all crew members that has not confirm their accounts in the pass 24 hours
-        /// </summary>
-        /// <returns>All crew members that has not confirm their accounts</returns>
-        public IQueryable<Models.CrewMember> FindExpireCrewMembersConfirmation()
-        {
-            try
-            {
-                IQueryable<Models.CrewMember> _selectedCrewMember =
-                                          from _crewMember in CurrentContext.CrewMembers
-                                          where _crewMember.ConfirmationLimit<DateTime.Now
-                                          select _crewMember;
-
-                return _selectedCrewMember;
-            }
-            catch (System.InvalidOperationException E)
-            {
-                return null;
             }
         }
 
@@ -164,7 +143,7 @@ namespace Server.Persistences
                 return CurrentContext.CrewMembers.Find(CrewMemberId);
             }
             catch (Exception E) {
-                throw new Exception("Crew member not found");
+                throw new Exceptions.CrewMemberNotFoundException();
             }
         }
 

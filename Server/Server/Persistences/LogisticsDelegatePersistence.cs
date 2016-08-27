@@ -32,7 +32,7 @@ namespace Server.Persistences
             }
             catch (System.InvalidOperationException E)
             {
-                throw new Exception("Delegate not found");
+                throw new Exceptions.LogisticDelegateNotFoundException();
             }
         }
 
@@ -56,7 +56,7 @@ namespace Server.Persistences
             catch (System.InvalidOperationException E)
             {
 
-                throw new Exception("Delegate not found");
+                throw new Exceptions.LogisticDelegateNotFoundException();
 
             }
         }
@@ -80,7 +80,7 @@ namespace Server.Persistences
             catch (System.InvalidOperationException E)
             {
 
-                throw new Exception("Delegate not found");
+                return null; 
 
             }
         }
@@ -103,7 +103,7 @@ namespace Server.Persistences
             }
             catch (System.InvalidOperationException E)
             {
-                throw new Exception("Delegate not found");
+                throw new Exceptions.LogisticDelegateNotFoundException();
             }
         }
 
@@ -153,7 +153,9 @@ namespace Server.Persistences
                 return CurrentContext.LogisticDelegates.Find(LogisticsDelegateId);
             }
             catch (Exception E) {
-                throw new Exception("Delegate not found");
+
+                throw new Exceptions.LogisticDelegateNotFoundException();
+
             }
         }
 

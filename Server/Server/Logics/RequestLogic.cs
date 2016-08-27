@@ -31,234 +31,462 @@ namespace Server.Logics
 
         }
 
-
+   
         public void DelegateRegisterRequest(int DelegateId,Models.Request NewRequest){
-            NewRequest.Id = 0;
-
-            if (NewRequest.RequestDate < DateTime.Now.AddHours(1)) {
-                throw new Exception("Invalid Date");
-            }
-            if (NewRequest.Team.Any() == false)
+            try
             {
-                throw new Exception("No suitable team");
+                NewRequest.Id = 0;
+
+                if (NewRequest.RequestDate < DateTime.Now.AddHours(1))
+                {
+                    throw new Exception("Invalid Date");
+                }
+                if (NewRequest.Team.Any() == false)
+                {
+                    throw new Exception("No suitable team");
+                }
+
+                foreach (TeamMember _teamMember in NewRequest.Team)
+                {
+                    _teamMember.Id = 0;
+                    Models.CrewMember _crewMember =
+                        this.CrewMemberPersistence.FindById(_teamMember.Member.Id);
+                    if (_crewMember == null)
+                    {
+                        throw new Exceptions.CrewMemberNotFoundException();
+                    }
+                    _teamMember.Member = _crewMember;
+                }
+
+                Models.LogisticsDelegate _delegate =
+                    this.LogisteDelegatePersistence.FindById(DelegateId);
+
+                NewRequest.RegisterDelegate = _delegate;
+                NewRequest.ApproveDelegate = _delegate;
+                NewRequest.Provider =
+                    this.ProviderPersistence.FindById(NewRequest.Id);
+                Models.Request _savedRequest =
+                    this.RequestPersistence.AddOrUpdateRequest(NewRequest);
+
+                foreach (TeamMember _threadTeamMember in _savedRequest.Team)
+                {
+                    new Threads.CrewMemberAcceptenceThread(_threadTeamMember, this.CurrentContext);
+                    #region Push notification to CrewMember
+                    Models.Device _memberDevice = _threadTeamMember.Member.Device;
+                    Pushs.Push _pushService =
+                        Pushs.PushFactory.GetPushService(_memberDevice.Type);
+                    _pushService.AddToken(_memberDevice.Token);
+                    String _title;
+
+                    if (_memberDevice.Language == Device.DeviceLanguage.EN)
+                    {
+                        _title = Pushs.PushResources.DelegateRegisterNewRequest_EN;
+                    }
+                    else if (_memberDevice.Language == Device.DeviceLanguage.ES)
+                    {
+                        _title = Pushs.PushResources.DelegateRegisterNewRequest_ES;
+                    }
+                    else
+                    {
+                        _title = Pushs.PushResources.DelegateRegisterNewRequest_BR;
+                    }
+
+                    _pushService.SendToUser(_title, JsonConvert.SerializeObject(_savedRequest),
+                        _memberDevice.Type);
+                    #endregion
+                }
             }
+            catch (Exception E)
+            {
+                throw E;
+            }
+        }
 
+       
+        public void DelegateAcceptRequest(long RequestId,long DelegateId,long ProviderId) {
+            try
+            {
+                Models.Request _request = this.RequestPersistence.FindById(RequestId);
 
-            foreach (TeamMember _teamMember in NewRequest.Team) {
-
-                _teamMember.Id = 0;
-
-                Models.CrewMember _crewMember =
-                    this.CrewMemberPersistence.FindById(_teamMember.Member.Id);
-
+                if (_request.IsApproved == false)
+                {
+                    throw new Exception("Request has been cancel");
+                }
+                Models.LogisticsDelegate _delegate =
+                    this.LogisteDelegatePersistence.FindById(DelegateId);
+                _request.ApproveDelegate = _delegate;
+                _request.CancelDelegate = null;
+                _request.IsApproved = true;
+                _request.Provider = this.ProviderPersistence.FindById(ProviderId);
+                _request = this.RequestPersistence.AddOrUpdateRequest(_request);
 
                 #region Push notification to CrewMember
+                Models.CrewMember _crewMember = _request.Team.First().Member;
                 Models.Device _memberDevice = _crewMember.Device;
-                Pushs.Push _pushService = 
+                Pushs.Push _pushService =
                     Pushs.PushFactory.GetPushService(_memberDevice.Type);
                 _pushService.AddToken(_memberDevice.Token);
                 String _title;
 
                 if (_memberDevice.Language == Device.DeviceLanguage.EN)
                 {
-                    _title = Pushs.PushResources.DelegateRegisterNewRequest_EN;
+                    _title = Pushs.PushResources.DelegateAcceptedRequest_EN;
                 }
                 else if (_memberDevice.Language == Device.DeviceLanguage.ES)
                 {
-                    _title = Pushs.PushResources.DelegateRegisterNewRequest_ES;
+                    _title = Pushs.PushResources.DelegateAcceptedRequest_ES;
                 }
                 else
                 {
-                    _title = Pushs.PushResources.DelegateRegisterNewRequest_BR;
+                    _title = Pushs.PushResources.DelegateAcceptedRequest_BR;
                 }
 
-                _pushService.SendToUser(_title,"", _memberDevice.Type);
+                _pushService.SendToUser(_title, _request.Team.First().Id.ToString()
+                    , _memberDevice.Type);
                 #endregion
 
+                #region Web socket message to logistic delegate
+                JsonObject _jsonMessage = new JsonObject();
+                _jsonMessage.Event = JsonObject.ServerEvent.DelegateAcceptedRequest;
+                _jsonMessage.TriggerBy = DelegateId.ToString();
+                _jsonMessage.Data = _request.Id.ToString();
+                WebSockets.List.LogisticsWebSocketList.BroadCast(JsonConvert.SerializeObject(_jsonMessage));
+                #endregion
 
-                new Threads.CrewMemberAcceptenceThread(_teamMember,this.CurrentContext);
-
-                _teamMember.Member = _crewMember;
-                
+                #region Gcm Push message to logistics delegates
+                Pushs.Push _gcmPush = Pushs.PushFactory.GetGcmPushSender();
+                foreach (LogisticsDelegate _delegateGcm in CurrentContext.LogisticDelegates)
+                {
+                    _gcmPush.AddToken(_delegateGcm.Device.Token);
+                }
+                _gcmPush.SendToUser
+                    (JsonObject.ServerEvent.DelegateAcceptedRequest.ToString()
+                    , _request.Id.ToString(), false);
+                #endregion
             }
-        
-
-            Models.LogisticsDelegate _delegate =
-                this.LogisteDelegatePersistence.FindById(DelegateId);
-
-            NewRequest.RegisterDelegate = _delegate;
-            NewRequest.ApproveDelegate = _delegate;
-            NewRequest.Provider = 
-                this.ProviderPersistence.FindById(NewRequest.Id);
-            this.RequestPersistence.AddOrUpdateRequest(NewRequest);
-
-
-        }
-
-        public void DelegateAcceptRequest(long RequestId,long DelegateId,long ProviderId) {
-
-            Models.Request _request = this.RequestPersistence.FindById(RequestId);
-
-            if (_request.IsApproved == false)
+            catch (Exception E)
             {
-                throw new Exception("Request has been cancel");
+                throw E;
             }
-            Models.LogisticsDelegate _delegate =
-                this.LogisteDelegatePersistence.FindById(DelegateId);
-            _request.ApproveDelegate = _delegate;
-            _request.CancelDelegate = null;
-            _request.IsApproved = true;
-            _request.Provider = this.ProviderPersistence.FindById(ProviderId);
-            this.RequestPersistence.AddOrUpdateRequest(_request);
 
-            //Send notifications
         }
 
+   
         public void DelegateRejectRequest(long RequestId, long DelegateId)
         {
-
-            Models.Request _request = this.RequestPersistence.FindById(RequestId);
-            if (_request.IsApproved == true)
+            try
             {
-                throw new Exception("Request has been accepted");
+                Models.Request _request = this.RequestPersistence.FindById(RequestId);
+                if (_request.IsApproved == true)
+                {
+                    throw new Exception("Request has been accepted");
+                }
+                Models.LogisticsDelegate _delegate =
+                    this.LogisteDelegatePersistence.FindById(DelegateId);
+                _request.CancelDelegate = _delegate;
+                _request.ApproveDelegate = null;
+                _request.IsApproved = false;
+                this.RequestPersistence.AddOrUpdateRequest(_request);
+
+                #region Push notification to CrewMember
+                Models.CrewMember _crewMember = _request.Team.First().Member;
+                Models.Device _memberDevice = _crewMember.Device;
+                Pushs.Push _pushService =
+                    Pushs.PushFactory.GetPushService(_memberDevice.Type);
+                _pushService.AddToken(_memberDevice.Token);
+                String _title;
+
+                if (_memberDevice.Language == Device.DeviceLanguage.EN)
+                {
+                    _title = Pushs.PushResources.DelegateRejectedRequest_EN;
+                }
+                else if (_memberDevice.Language == Device.DeviceLanguage.ES)
+                {
+                    _title = Pushs.PushResources.DelegateRejectedRequest_ES;
+                }
+                else
+                {
+                    _title = Pushs.PushResources.DelegateRejectedRequest_BR;
+                }
+
+                _pushService.SendToUser(_title, _request.Team.First().Id.ToString()
+                    , _memberDevice.Type);
+                #endregion
+
+                #region Web socket message to logistic delegate
+                JsonObject _jsonMessage = new JsonObject();
+                _jsonMessage.Event = JsonObject.ServerEvent.DelegateRejectedRequest;
+                _jsonMessage.TriggerBy = DelegateId.ToString();
+                _jsonMessage.Data = _request.Id.ToString();
+                WebSockets.List.LogisticsWebSocketList.BroadCast(JsonConvert.SerializeObject(_jsonMessage));
+                #endregion
+
+                #region Gcm Push message to logistics delegates
+                Pushs.Push _gcmPush = Pushs.PushFactory.GetGcmPushSender();
+                foreach (LogisticsDelegate _delegateGcm in CurrentContext.LogisticDelegates)
+                {
+                    _gcmPush.AddToken(_delegateGcm.Device.Token);
+                }
+                _gcmPush.SendToUser
+                    (JsonObject.ServerEvent.DelegateRejectedRequest.ToString()
+                    , _request.Id.ToString(), false);
+                #endregion
+
             }
-            Models.LogisticsDelegate _delegate =
-                this.LogisteDelegatePersistence.FindById(DelegateId);
-            _request.CancelDelegate = _delegate;
-            _request.ApproveDelegate = null;
-            _request.IsApproved = false;
-            this.RequestPersistence.AddOrUpdateRequest(_request);
+            catch (Exception E)
+            {
+                throw E;
+            }
 
-            //Send notifications
-        }
+         }
 
+      
         public void CrewMemberRegisterRequest(long CrewMemberId, Models.Request NewRequest)
         {
-
-            NewRequest.Id = 0;
-
-            if (NewRequest.RequestDate < DateTime.Now.AddHours(1))
+            try
             {
-                throw new Exception("Invalid Date");
+                NewRequest.Id = 0;
+
+                if (NewRequest.RequestDate < DateTime.Now.AddHours(1))
+                {
+                    throw new Exception("Invalid Date");
+                }
+                if (NewRequest.Team.Any() == false)
+                {
+                    throw new Exception("No suitable team");
+                }
+
+                Models.CrewMember _crewMember =
+                    this.CrewMemberPersistence.FindById(CrewMemberId);
+                if (_crewMember == null)
+                {
+                    throw new Exceptions.CrewMemberNotFoundException();
+                }
+
+                Models.TeamMember _teamMember = NewRequest.Team.First();
+                _teamMember.Member = _crewMember;
+                _teamMember.IsAccepted = true;
+                _teamMember.CancelationReason = null;
+
+                NewRequest.RegisterDelegate = null;
+                NewRequest.ApproveDelegate = null;
+                NewRequest.CancelDelegate = null;
+                NewRequest.IsApproved = false;
+                Models.Request _savedRequest =
+                    this.RequestPersistence.AddOrUpdateRequest(NewRequest);
+                new Threads.DelegatesAcceptenceThread(_savedRequest, this.CurrentContext);
+
+                #region Web socket message to logistic delegate
+                JsonObject _jsonMessage = new JsonObject();
+                _jsonMessage.Event = JsonObject.ServerEvent.CrewMemberRegistedRequest;
+                _jsonMessage.TriggerBy = _crewMember.Id.ToString();
+                _jsonMessage.Data = JsonConvert.SerializeObject(NewRequest);
+                WebSockets.List.LogisticsWebSocketList.BroadCast(JsonConvert.SerializeObject(_jsonMessage));
+                #endregion
+
+                #region Gcm Push message to logistics delegates
+                Pushs.Push _gcmPush = Pushs.PushFactory.GetGcmPushSender();
+                foreach (LogisticsDelegate _delegate in CurrentContext.LogisticDelegates)
+                {
+                    _gcmPush.AddToken(_delegate.Device.Token);
+                }
+                _gcmPush.SendToUser
+                    (JsonObject.ServerEvent.CrewMemberRegistedRequest.ToString()
+                    , _crewMember.Id.ToString(), false);
+                #endregion
             }
-            if (NewRequest.Team.Any() == false)
+            catch (Exceptions.CrewMemberNotFoundException E)
             {
-                throw new Exception("No suitable team");
+                throw E;
             }
-
-            Models.CrewMember _crewMember =
-                this.CrewMemberPersistence.FindById(CrewMemberId);
-
-            Models.TeamMember _teamMember = NewRequest.Team.First();
-            _teamMember.Member = _crewMember;
-            _teamMember.IsAccepted = true;
-            _teamMember.CancelationReason = null;
-
-            NewRequest.RegisterDelegate = null;
-            NewRequest.ApproveDelegate = null;
-            NewRequest.CancelDelegate = null;
-            NewRequest.IsApproved = false;
-            this.RequestPersistence.AddOrUpdateRequest(NewRequest);
-            new Threads.DelegatesAcceptenceThread(NewRequest, this.CurrentContext);
-
-            #region Web socket message to logistic delegate
-            JsonObject _jsonMessage = new JsonObject();
-            _jsonMessage.Event = JsonObject.ServerEvent.CrewMemberRegistedRequest;
-            _jsonMessage.TriggerBy = _crewMember.Id.ToString();
-            _jsonMessage.Data = JsonConvert.SerializeObject(NewRequest);
-            WebSockets.List.LogisticsWebSocketList.BroadCast(JsonConvert.SerializeObject(_jsonMessage));
-            #endregion
-
-            #region Gcm Push message to logistics delegates
-            Pushs.Push _gcmPush = Pushs.PushFactory.GetGcmPushSender();
-            foreach (LogisticsDelegate _delegate in CurrentContext.LogisticDelegates)
+            catch (Exception E)
             {
-                _gcmPush.AddToken(_delegate.Device.Token);
+                throw E;
             }
-            _gcmPush.SendToUser
-                (JsonObject.ServerEvent.CrewMemberRegistedRequest.ToString()
-                , _crewMember.Id.ToString(), false);
-            #endregion
-
         }
 
+ 
         public void CrewMemberAcceptRequest(long TeamMemberId ,long CrewMemberId)
         {
-            Models.TeamMember _teamMember = this.TeamMemberPersistence.FindById(TeamMemberId);
-
-            Models.CrewMember _crewMember = this.CrewMemberPersistence.FindById(CrewMemberId);
-
-            if (_crewMember.Id == _teamMember.Id)
+            try
             {
-                throw new Exception("Request does not belong to crew member");
-            }
-            if (_teamMember != null)
-            {
-                if (_teamMember.IsAccepted == false)
+                Models.TeamMember _teamMember = this.TeamMemberPersistence.FindById(TeamMemberId);
+
+                Models.CrewMember _crewMember = this.CrewMemberPersistence.FindById(CrewMemberId);
+
+                if (_crewMember == null)
                 {
-
-                    throw new Exception("Team member already canceld this request");
+                    throw new Exceptions.CrewMemberNotFoundException();
                 }
+
+                if (_crewMember.Id == _teamMember.Id)
+                {
+                    throw new Exception("Request does not belong to crew member");
+                }
+                if (_teamMember != null)
+                {
+                    if (_teamMember.IsAccepted == false)
+                    {
+
+                        throw new Exception("Team member already canceld this request");
+                    }
+                }
+
+                _teamMember.IsAccepted = true;
+                this.TeamMemberPersistence.AddOrUpdateRequest(_teamMember);
+
+                #region Web socket message to logistic delegate
+                JsonObject _jsonMessage = new JsonObject();
+                _jsonMessage.Event = JsonObject.ServerEvent.CrewMemberAcceptedRequest;
+                _jsonMessage.TriggerBy = _crewMember.Id.ToString();
+                _jsonMessage.Data = _teamMember.Id.ToString();
+                WebSockets.List.LogisticsWebSocketList.BroadCast(JsonConvert.SerializeObject(_jsonMessage));
+                #endregion
+
+                #region Gcm Push message to logistics delegates
+                Pushs.Push _gcmPush = Pushs.PushFactory.GetGcmPushSender();
+                foreach (LogisticsDelegate _delegate in CurrentContext.LogisticDelegates)
+                {
+                    _gcmPush.AddToken(_delegate.Device.Token);
+                }
+                _gcmPush.SendToUser
+                    (JsonObject.ServerEvent.CrewMemberAcceptedRequest.ToString()
+                    , _teamMember.Id.ToString(), false);
+                #endregion
+
             }
-
-            _teamMember.IsAccepted = true;
-            this.TeamMemberPersistence.AddOrUpdateRequest(_teamMember);
-           
-            //send notifications
-
+            catch (Exceptions.CrewMemberNotFoundException E)
+            {
+                throw E;
+            }
+            catch (Exception E)
+            {
+                throw E;
+            }
         }
 
+        
         public void CrewMemberRejectRequest(long TeamMemberId, long CrewMemberId)
         {
-            Models.TeamMember _teamMember = this.TeamMemberPersistence.FindById(TeamMemberId);
-
-            Models.CrewMember _crewMember = this.CrewMemberPersistence.FindById(CrewMemberId);
-
-            if (_crewMember.Id == _teamMember.Id)
+            try
             {
-                throw new Exception("Request does not belong to crew member");
-            }
-            if (_teamMember != null)
-            {
-                if (_teamMember.IsAccepted == true)
+                Models.TeamMember _teamMember = this.TeamMemberPersistence.FindById(TeamMemberId);
+
+                Models.CrewMember _crewMember = this.CrewMemberPersistence.FindById(CrewMemberId);
+
+                if (_crewMember == null)
                 {
-                    throw new Exception("Team member already accepted this request");
+                    throw new Exceptions.CrewMemberNotFoundException();
                 }
+
+                if (_crewMember.Id == _teamMember.Id)
+                {
+                    throw new Exception("Request does not belong to crew member");
+                }
+                if (_teamMember != null)
+                {
+                    if (_teamMember.IsAccepted == true)
+                    {
+                        throw new Exception("Team member already accepted this request");
+                    }
+                }
+
+                _teamMember.IsAccepted = false;
+                this.TeamMemberPersistence.AddOrUpdateRequest(_teamMember);
+
+                #region Web socket message to logistic delegate
+                JsonObject _jsonMessage = new JsonObject();
+                _jsonMessage.Event = JsonObject.ServerEvent.CrewMemberRejectedRequest;
+                _jsonMessage.TriggerBy = _crewMember.Id.ToString();
+                _jsonMessage.Data = _teamMember.Id.ToString();
+                WebSockets.List.LogisticsWebSocketList.BroadCast(JsonConvert.SerializeObject(_jsonMessage));
+                #endregion
+
+                #region Gcm Push message to logistics delegates
+                Pushs.Push _gcmPush = Pushs.PushFactory.GetGcmPushSender();
+                foreach (LogisticsDelegate _delegate in CurrentContext.LogisticDelegates)
+                {
+                    _gcmPush.AddToken(_delegate.Device.Token);
+                }
+                _gcmPush.SendToUser
+                    (JsonObject.ServerEvent.CrewMemberRejectedRequest.ToString()
+                    , _teamMember.Id.ToString(), false);
+                #endregion
             }
-
-            _teamMember.IsAccepted = false;
-            this.TeamMemberPersistence.AddOrUpdateRequest(_teamMember);
-
-            //send notifications
+            catch (Exceptions.CrewMemberNotFoundException E)
+            {
+                throw E;
+            }
+            catch (Exception E)
+            {
+                throw E;
+            }
+           
         }
 
+       
         public void CrewMemberModifyRequest
             (long TeamMemberId, long CrewMemberId,TeamMember ModifiedTeamMember)
         {
-            Models.TeamMember _teamMember = this.TeamMemberPersistence.FindById(TeamMemberId);
-
-            Models.CrewMember _crewMember = this.CrewMemberPersistence.FindById(CrewMemberId);
-
-            if (_crewMember.Id == _teamMember.Id)
+            try
             {
-                throw new Exception("Request does not belong to crew member");
-            }
-            if (_teamMember.Request.RequestDate > DateTime.Now.AddMinutes(15)) {
-                throw new Exception("Request change time lapse has expired");
-            }
+                Models.TeamMember _teamMember = this.TeamMemberPersistence.FindById(TeamMemberId);
 
-            if (_teamMember != null)
-            {
-                if (_teamMember.IsAccepted == false)
+                Models.CrewMember _crewMember = this.CrewMemberPersistence.FindById(CrewMemberId);
+
+                if (_crewMember == null)
                 {
-                    throw new Exception("This request has been rejected");
+                    throw new Exceptions.CrewMemberNotFoundException();
                 }
-            }
 
-            _teamMember.Lat = ModifiedTeamMember.Lat;
-            _teamMember.Long = ModifiedTeamMember.Long;
-            this.TeamMemberPersistence.AddOrUpdateRequest(_teamMember);
-            //send notifications
+                if (_crewMember.Id == _teamMember.Id)
+                {
+                    throw new Exception("Request does not belong to crew member");
+                }
+                if (_teamMember.Request.RequestDate > DateTime.Now.AddMinutes(15))
+                {
+                    throw new Exception("Request change time lapse has expired");
+                }
+
+                if (_teamMember != null)
+                {
+                    if (_teamMember.IsAccepted == false)
+                    {
+                        throw new Exception("This request has been rejected");
+                    }
+                }
+
+                _teamMember.Lat = ModifiedTeamMember.Lat;
+                _teamMember.Long = ModifiedTeamMember.Long;
+                this.TeamMemberPersistence.AddOrUpdateRequest(_teamMember);
+
+                #region Web socket message to logistic delegate
+                JsonObject _jsonMessage = new JsonObject();
+                _jsonMessage.Event = JsonObject.ServerEvent.CrewMemberModifiedRequest;
+                _jsonMessage.TriggerBy = _crewMember.Id.ToString();
+                _jsonMessage.Data = _teamMember.Id.ToString();
+                WebSockets.List.LogisticsWebSocketList.BroadCast(JsonConvert.SerializeObject(_jsonMessage));
+                #endregion
+
+                #region Gcm Push message to logistics delegates
+                Pushs.Push _gcmPush = Pushs.PushFactory.GetGcmPushSender();
+                foreach (LogisticsDelegate _delegate in CurrentContext.LogisticDelegates)
+                {
+                    _gcmPush.AddToken(_delegate.Device.Token);
+                }
+                _gcmPush.SendToUser
+                    (JsonObject.ServerEvent.CrewMemberModifiedRequest.ToString()
+                    , _teamMember.Id.ToString(), false);
+                #endregion
+            }catch (Exceptions.CrewMemberNotFoundException E)
+            {
+                throw E;
+            }
+            catch (Exception E)
+            {
+                throw E;
+            }
+        
         }
 
     }

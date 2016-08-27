@@ -27,11 +27,6 @@ namespace Server.App_Start
                     = new Persistences.CrewMemberPersistence(_currentContext);
 
                 Models.CrewMember _loginCrewMember = _persistence.FindCrewMemberByEmail(context.UserName);
-
-                if (_loginCrewMember == null) {
-                    throw new Exception();
-                }
-
                 Models.CrewMember _passwordValidator = new Models.CrewMember();
                 _passwordValidator.Password = context.Password;
                 _passwordValidator.CheckAndEncryptPassword();
