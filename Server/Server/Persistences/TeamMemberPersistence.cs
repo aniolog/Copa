@@ -22,7 +22,7 @@ namespace Server.Persistences
             }
             catch(System.InvalidOperationException E)
             {
-                return null;
+                throw new Exceptions.TeamMemberNotFoundException();
             }
         }
 

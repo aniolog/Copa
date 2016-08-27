@@ -176,10 +176,17 @@
     <Compile Include="Controllers\RequestsController.cs" />
     <Compile Include="Controllers\VehiclesController.cs" />
     <Compile Include="Exceptions\CrewMemberNotFoundException.cs" />
+    <Compile Include="Exceptions\DeviceNotFoundException.cs" />
     <Compile Include="Exceptions\EmailAlreadyInUse.cs" />
     <Compile Include="Exceptions\InvalidEmailException.cs" />
     <Compile Include="Exceptions\InvalidPasswordException.cs" />
+    <Compile Include="Exceptions\InvalidTokenException.cs" />
+    <Compile Include="Exceptions\LogisticDelegateNotFoundException.cs" />
+    <Compile Include="Exceptions\PlaceNotFoundException.cs" />
+    <Compile Include="Exceptions\ProviderNotFoundException.cs" />
+    <Compile Include="Exceptions\RequestNotFoundException.cs" />
     <Compile Include="Exceptions\RestorePasswordRequstHasExpiredException.cs" />
+    <Compile Include="Exceptions\TeamMemberNotFoundException.cs" />
     <Compile Include="Filters\CrewMemberAcceptedRequest.cs" />
     <Compile Include="Filters\CrewMemberModifiedRequest.cs" />
     <Compile Include="Filters\CrewMemberRegisterRequest.cs" />
