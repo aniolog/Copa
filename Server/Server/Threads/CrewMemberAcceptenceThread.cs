@@ -23,13 +23,17 @@ namespace Server.Threads
         private Models.Context CurrentContext;
 
         /// <summary>
+        /// 
+        /// </summary>
+        private Persistences.TeamMemberPersistence TeamMemberPersitence;
+
+        /// <summary>
         /// This constructor instantiate and start the thread.
         /// </summary>
         /// <param name="TeamMember"></param>
         /// <param name="CurrentContext"></param>
-        public CrewMemberAcceptenceThread(Models.TeamMember TeamMember, Models.Context CurrentContext)
+        public CrewMemberAcceptenceThread(Models.TeamMember TeamMember)
         {
-            this.CurrentContext = CurrentContext;
             this.TeamMember = TeamMember;
             Thread _acceptenceThread = new Thread(this.Start);
             _acceptenceThread.Start();
@@ -42,7 +46,13 @@ namespace Server.Threads
         /// will denied and send the proper notifications.
         /// </summary>
         private void Start(){
-            System.Threading.Thread.Sleep(5 * 60 * 1000);
+            System.Threading.Thread.Sleep(30 * 60 * 1000);
+            this.CurrentContext = new Context();
+            this.TeamMemberPersitence = 
+                new Persistences.TeamMemberPersistence(this.CurrentContext);
+            this.TeamMember = this.TeamMemberPersitence.FindById(TeamMember.Id);
+
+
             if (TeamMember.IsAccepted==false) {
 
 
@@ -66,8 +76,8 @@ namespace Server.Threads
                     _gcmPush.AddToken(_delegate.Device.Token); 
                 }
                 _gcmPush.SendToUser
-                    (JsonObject.ServerEvent.TeamMemberCanceldByInactivity.ToString()
-                    ,this.TeamMember.Id.ToString(),false);
+                    (JsonObject.ServerEvent.TeamMemberCanceldByInactivity.ToString(),
+                    "",this.TeamMember.Id.ToString(),false);
                 #endregion
 
                 #region Push message to crewmember
@@ -76,21 +86,25 @@ namespace Server.Threads
                     Pushs.PushFactory.GetPushService(_memberDevice.Type);
                 _pushService.AddToken(_memberDevice.Token);
                 String _title;
+                String _message;
 
                 if (_memberDevice.Language == Device.DeviceLanguage.EN)
                 {
-                    _title = Pushs.PushResources.TeamMemberInactivity_EN;
+                    _title = Pushs.PushResources.Notification_EN;
+                    _message = Pushs.PushResources.TeamMemberInactivityMessage_EN;
                 }
                 else if (_memberDevice.Language == Device.DeviceLanguage.ES)
                 {
-                    _title = Pushs.PushResources.TeamMemberInactivity_ES;
+                    _title = Pushs.PushResources.Notification_ES;
+                    _message = Pushs.PushResources.TeamMemberInactivityMessage_ES;
                 }
                 else
                 {
-                    _title = Pushs.PushResources.TeamMemberInactivity_BR;
+                    _title = Pushs.PushResources.Notification_BR;
+                    _message = Pushs.PushResources.TeamMemberInactivityMessage_BR;
                 }
 
-                _pushService.SendToUser(_title, TeamMember.Id.ToString(),_memberDevice.Type);
+                _pushService.SendToUser(_title,_message, TeamMember.Id.ToString(),_memberDevice.Type);
 
                 #endregion
             }

@@ -8,7 +8,8 @@ namespace Server.Pushs.Ios
     public class IosPush:Push
     {
 
-        public override void Send(string Message)
+
+        public override void Send(string Title, string Message, string Data)
         {
             throw new NotImplementedException();
         }

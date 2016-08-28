@@ -9,6 +9,8 @@ namespace Server.Pushs.GCM
     {
         public String title { set; get; }
 
+        public String message { set; get; }
+
         public String data { set; get; }
     }
 }

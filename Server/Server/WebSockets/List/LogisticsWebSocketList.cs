@@ -25,6 +25,7 @@ namespace Server.WebSockets.List
 
 
         public static void BroadCast(String Message) {
+            GetInstance();
 
             Byte[] MessageByte = Encoding.UTF8.GetBytes(Message);
 

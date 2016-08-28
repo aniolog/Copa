@@ -22,14 +22,14 @@ namespace Server.Models
 
         public DateTime EndDate { set; get; }
 
-        [Required] 
-        public Currency Currency { set; get; }
+        [Required]
+        public virtual Currency Currency { set; get; }
 
 
-        public ICollection<Bill> Bills { set; get; }
+        public virtual ICollection<Bill> Bills { set; get; }
 
 
-        public Provider Provider { set; get; }
+        public virtual Provider Provider { set; get; }
 
 
         public Rate()

@@ -48,7 +48,7 @@ namespace Server.Models
         /// 
         /// </summary>
         [Required] 
-        public CrewMember Member { set; get; }
+        public virtual CrewMember Member { set; get; }
 
         /// <summary>   
         /// 

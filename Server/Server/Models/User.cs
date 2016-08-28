@@ -24,7 +24,16 @@ namespace Server.Models
         private String UserResetPasswordId { set; get; }
 
         private String UserConfirmAccountId { set; get; }
-        
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public User()
+        {
+            this.ConfirmAccountId = "";
+            this.ConfirmationLimit = DateTime.Now;
+        }
+
 
         /// <summary>
         /// The regular expresion checks if the Email is in a valid format
@@ -40,15 +49,7 @@ namespace Server.Models
             }
         }
 
-        /// <summary>
-        /// The Regular expresion checks if the password contains:
-        /// At least one upper case english letter
-        /// At least one lower case english letter
-        /// At least one digit
-        /// At least one special character
-        /// Minimum 8 in length
-        /// If the password fullfill all the conditions then it will be encrypted using sha256
-        /// </summary>
+       
         [Required]
         public String Password { 
             set {
@@ -137,20 +138,17 @@ namespace Server.Models
         /// <summary>
         /// 
         /// </summary>
-        public Device Device { get; set; }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        public User()
-        {
-            this.ConfirmAccountId = "";
-            this.ConfirmationLimit = DateTime.Now;
-        }
+        public virtual Device Device { get; set; }
 
 
         /// <summary>
-        /// Encrypts a Password string using Sha 256 algorithm
+        /// The Regular expresion checks if the password contains:
+        /// At least one upper case english letter
+        /// At least one lower case english letter
+        /// At least one digit
+        /// At least one special character
+        /// Minimum 8 in length
+        /// If the password fullfill all the conditions then it will be encrypted using sha256
         /// </summary>
         /// <param name="Password"></param>
         /// <returns></returns>
@@ -173,6 +171,10 @@ namespace Server.Models
             
        }
 
+        /// <summary>
+        /// This method check if the email of the user is valid 
+        /// The email needs to inside of the company domain
+        /// </summary>
         public void CheckEmail() { 
              
             Regex _Regex = new Regex(@"[_a-z0-9-]+(\.[_a-z0-9-]+)*@(?i)gmail.com");

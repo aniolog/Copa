@@ -61,137 +61,164 @@ namespace Server.Pushs {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to .
+        ///   Looks up a localized string similar to 4.
         /// </summary>
-        internal static string DelegateAcceptedRequest_BR {
+        internal static string DelegateAcceptedRequestMessage_BR {
             get {
-                return ResourceManager.GetString("DelegateAcceptedRequest_BR", resourceCulture);
+                return ResourceManager.GetString("DelegateAcceptedRequestMessage_BR", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to .
+        ///   Looks up a localized string similar to 5.
         /// </summary>
-        internal static string DelegateAcceptedRequest_EN {
+        internal static string DelegateAcceptedRequestMessage_EN {
             get {
-                return ResourceManager.GetString("DelegateAcceptedRequest_EN", resourceCulture);
+                return ResourceManager.GetString("DelegateAcceptedRequestMessage_EN", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to .
+        ///   Looks up a localized string similar to 6.
         /// </summary>
-        internal static string DelegateAcceptedRequest_ES {
+        internal static string DelegateAcceptedRequestMessage_ES {
             get {
-                return ResourceManager.GetString("DelegateAcceptedRequest_ES", resourceCulture);
+                return ResourceManager.GetString("DelegateAcceptedRequestMessage_ES", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to .
+        ///   Looks up a localized string similar to 10.
         /// </summary>
-        internal static string DelegateInactivity_BR {
+        internal static string DelegateInactivityMessage_BR {
             get {
-                return ResourceManager.GetString("DelegateInactivity_BR", resourceCulture);
+                return ResourceManager.GetString("DelegateInactivityMessage_BR", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to .
+        ///   Looks up a localized string similar to 11.
         /// </summary>
-        internal static string DelegateInactivity_EN {
+        internal static string DelegateInactivityMessage_EN {
             get {
-                return ResourceManager.GetString("DelegateInactivity_EN", resourceCulture);
+                return ResourceManager.GetString("DelegateInactivityMessage_EN", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to .
+        ///   Looks up a localized string similar to 12.
         /// </summary>
-        internal static string DelegateInactivity_ES {
+        internal static string DelegateInactivityMessage_ES {
             get {
-                return ResourceManager.GetString("DelegateInactivity_ES", resourceCulture);
+                return ResourceManager.GetString("DelegateInactivityMessage_ES", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to .
+        ///   Looks up a localized string similar to 16.
         /// </summary>
-        internal static string DelegateRegisterNewRequest_BR {
+        internal static string DelegateRegisterNewRequestMessage_BR {
             get {
-                return ResourceManager.GetString("DelegateRegisterNewRequest_BR", resourceCulture);
+                return ResourceManager.GetString("DelegateRegisterNewRequestMessage_BR", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to .
+        ///   Looks up a localized string similar to 17.
         /// </summary>
-        internal static string DelegateRegisterNewRequest_EN {
+        internal static string DelegateRegisterNewRequestMessage_EN {
             get {
-                return ResourceManager.GetString("DelegateRegisterNewRequest_EN", resourceCulture);
+                return ResourceManager.GetString("DelegateRegisterNewRequestMessage_EN", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to .
+        ///   Looks up a localized string similar to 18.
         /// </summary>
-        internal static string DelegateRegisterNewRequest_ES {
+        internal static string DelegateRegisterNewRequestMessage_ES {
             get {
-                return ResourceManager.GetString("DelegateRegisterNewRequest_ES", resourceCulture);
+                return ResourceManager.GetString("DelegateRegisterNewRequestMessage_ES", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to .
+        ///   Looks up a localized string similar to 22.
         /// </summary>
-        internal static string DelegateRejectedRequest_BR {
+        internal static string DelegateRejectedRequestMessage_BR {
             get {
-                return ResourceManager.GetString("DelegateRejectedRequest_BR", resourceCulture);
+                return ResourceManager.GetString("DelegateRejectedRequestMessage_BR", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to .
+        ///   Looks up a localized string similar to 23.
         /// </summary>
-        internal static string DelegateRejectedRequest_EN {
+        internal static string DelegateRejectedRequestMessage_EN {
             get {
-                return ResourceManager.GetString("DelegateRejectedRequest_EN", resourceCulture);
+                return ResourceManager.GetString("DelegateRejectedRequestMessage_EN", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to .
+        ///   Looks up a localized string similar to 24.
         /// </summary>
-        internal static string DelegateRejectedRequest_ES {
+        internal static string DelegateRejectedRequestMessage_ES {
             get {
-                return ResourceManager.GetString("DelegateRejectedRequest_ES", resourceCulture);
+                return ResourceManager.GetString("DelegateRejectedRequestMessage_ES", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to .
+        ///   Looks up a localized string similar to Nova notificação !.
         /// </summary>
-        internal static string TeamMemberInactivity_BR {
+        internal static string Notification_BR {
             get {
-                return ResourceManager.GetString("TeamMemberInactivity_BR", resourceCulture);
+                return ResourceManager.GetString("Notification_BR", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to .
+        ///   Looks up a localized string similar to New notification!.
         /// </summary>
-        internal static string TeamMemberInactivity_EN {
+        internal static string Notification_EN {
             get {
-                return ResourceManager.GetString("TeamMemberInactivity_EN", resourceCulture);
+                return ResourceManager.GetString("Notification_EN", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to .
+        ///   Looks up a localized string similar to Nueva notificacion!.
         /// </summary>
-        internal static string TeamMemberInactivity_ES {
+        internal static string Notification_ES {
             get {
-                return ResourceManager.GetString("TeamMemberInactivity_ES", resourceCulture);
+                return ResourceManager.GetString("Notification_ES", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 28.
+        /// </summary>
+        internal static string TeamMemberInactivityMessage_BR {
+            get {
+                return ResourceManager.GetString("TeamMemberInactivityMessage_BR", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 29.
+        /// </summary>
+        internal static string TeamMemberInactivityMessage_EN {
+            get {
+                return ResourceManager.GetString("TeamMemberInactivityMessage_EN", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 30.
+        /// </summary>
+        internal static string TeamMemberInactivityMessage_ES {
+            get {
+                return ResourceManager.GetString("TeamMemberInactivityMessage_ES", resourceCulture);
             }
         }
     }

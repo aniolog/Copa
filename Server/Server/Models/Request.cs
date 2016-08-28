@@ -28,17 +28,17 @@ namespace Server.Models
 
         public bool IsApproved { set; get; }
 
-        public ICollection<RequestedVehicle> RequestedVehicles { set; get; }
+        public virtual ICollection<RequestedVehicle> RequestedVehicles { set; get; }
 
-        public LogisticsDelegate CancelDelegate { set; get; }
+        public virtual LogisticsDelegate CancelDelegate { set; get; }
 
-        public LogisticsDelegate RegisterDelegate { set; get; }
+        public virtual LogisticsDelegate RegisterDelegate { set; get; }
 
-        public LogisticsDelegate ApproveDelegate { set; get; }
+        public virtual LogisticsDelegate ApproveDelegate { set; get; }
 
-        public ICollection<TeamMember> Team { set; get; }
+        public virtual ICollection<TeamMember> Team { set; get; }
 
-        public Provider Provider { set; get; }
+        public virtual Provider Provider { set; get; }
 
         public Request()
         {

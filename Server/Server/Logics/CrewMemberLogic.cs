@@ -17,62 +17,89 @@ namespace Server.Logics
         }
 
         public void AddCrewMember(Models.CrewMember NewCrewMember) {
-
-            if (CrewMemberPersistence.FindCrewMemberByEmail(NewCrewMember.Email)!=null) {
-                throw new Exception();
+            try
+            {
+                if (CrewMemberPersistence.FindCrewMemberByEmail(NewCrewMember.Email) != null)
+                {
+                    throw new Exceptions.EmailAlreadyInUse();
+                }
+                NewCrewMember.CheckAndEncryptPassword();
+                NewCrewMember.CheckEmail();
+                Models.CrewMember _savedCrewMember =
+                    this.CrewMemberPersistence.AddOrUpdateCrewMember(NewCrewMember);
+                Thread _workerThread = new Thread(_savedCrewMember.SendConfirmationEmail);
+                _workerThread.Start();
             }
-            NewCrewMember.CheckAndEncryptPassword();
-            NewCrewMember.CheckEmail();
-            Models.CrewMember _savedCrewMember=
-                this.CrewMemberPersistence.AddOrUpdateCrewMember(NewCrewMember);
-           Thread _workerThread = new Thread( _savedCrewMember.SendConfirmationEmail);
-           _workerThread.Start();
+            catch (Exception E)
+            {
+                throw E;
+            }
            
         }
 
 
         public void ConfirmCrewMemberAccount(String ConfirmationId) {
-            Models.CrewMember _confirmedCrewMember = 
-                this.CrewMemberPersistence.FindCrewMemberByConfirmationId(ConfirmationId);
-
-            
-            if (DateTime.Now > _confirmedCrewMember.ConfirmationLimit) {
-                throw new Exception("Se paso");
+            try
+            {
+                Models.CrewMember _confirmedCrewMember =
+                    this.CrewMemberPersistence.FindCrewMemberByConfirmationId(ConfirmationId);
+                if (DateTime.Now > _confirmedCrewMember.ConfirmationLimit)
+                {
+                    throw new Exception("Se paso");
+                }
+                _confirmedCrewMember.ConfirmAccountId = null;
+                _confirmedCrewMember.ConfirmationLimit = null;
+                this.CrewMemberPersistence.AddOrUpdateCrewMember(_confirmedCrewMember);
             }
-            _confirmedCrewMember.ConfirmAccountId = null;
-            _confirmedCrewMember.ConfirmationLimit = null;
-            this.CrewMemberPersistence.AddOrUpdateCrewMember(_confirmedCrewMember);
-
+            catch (Exception E)
+            {
+                throw E;
+            }
         }
 
         public void ResetPassword(Models.CrewMember ResetPasswordCrewMember,String ResetPasswordId) {
-            Models.CrewMember _resetPasswordCrewMember =
-                this.CrewMemberPersistence.FindCrewMemberByResetPassworId(ResetPasswordId);
-
-
-            if (DateTime.Now > _resetPasswordCrewMember.ResetPasswordLimit)
+            try
             {
-                throw new Exception("Se paso");
+                Models.CrewMember _resetPasswordCrewMember =
+                    this.CrewMemberPersistence.FindCrewMemberByResetPassworId(ResetPasswordId);
+                if (DateTime.Now > _resetPasswordCrewMember.ResetPasswordLimit)
+                {
+                    throw new Exception("Se paso");
+                }
+                _resetPasswordCrewMember.Password = ResetPasswordCrewMember.Password;
+                _resetPasswordCrewMember.ResetPasswordId = null;
+                _resetPasswordCrewMember.ResetPasswordLimit = null;
+                _resetPasswordCrewMember.CheckAndEncryptPassword();
+                this.CrewMemberPersistence.AddOrUpdateCrewMember(_resetPasswordCrewMember);
             }
-            _resetPasswordCrewMember.Password = ResetPasswordCrewMember.Password;
-            _resetPasswordCrewMember.ResetPasswordId = null;
-            _resetPasswordCrewMember.ResetPasswordLimit = null;
-            _resetPasswordCrewMember.CheckAndEncryptPassword();
-            this.CrewMemberPersistence.AddOrUpdateCrewMember(_resetPasswordCrewMember);
+            catch (Exception E)
+            {
+                throw E;
+            }
         }
 
 
 
         public void RequestResetPassword(String Email) {
-            Models.CrewMember _requestResetPasswordCrewMember = 
-                this.CrewMemberPersistence.FindCrewMemberByEmail(Email);
+            try
+            {
+                Models.CrewMember _requestResetPasswordCrewMember =
+                    this.CrewMemberPersistence.FindCrewMemberByEmail(Email);
+                if (_requestResetPasswordCrewMember == null)
+                {
+                    throw new Exceptions.CrewMemberNotFoundException();
+                }
 
-
-            _requestResetPasswordCrewMember.ResetPasswordId = "";
-            _requestResetPasswordCrewMember.ResetPasswordLimit = DateTime.Now;
-            CrewMemberPersistence.AddOrUpdateCrewMember(_requestResetPasswordCrewMember);
-            Thread _workerThread = new Thread(_requestResetPasswordCrewMember.SendResetPasswordEmail);
-            _workerThread.Start();
+                _requestResetPasswordCrewMember.ResetPasswordId = "";
+                _requestResetPasswordCrewMember.ResetPasswordLimit = DateTime.Now;
+                CrewMemberPersistence.AddOrUpdateCrewMember(_requestResetPasswordCrewMember);
+                Thread _workerThread = new Thread(_requestResetPasswordCrewMember.SendResetPasswordEmail);
+                _workerThread.Start();
+            }
+            catch (Exception E)
+            {
+                throw E;
+            }
 
         }
 
@@ -80,22 +107,30 @@ namespace Server.Logics
 
 
         public void UpdateCrewMember(int id,Models.CrewMember Data) {
-            Models.CrewMember _updateCrewMember =
-                 this.CrewMemberPersistence.FindById(id);
+            try
+            {
+                Models.CrewMember _updateCrewMember =
+                     this.CrewMemberPersistence.FindById(id);
+                if (Data.Name == null)
+                {
+                    throw new Exception("Nombre no puede ser null");
+                }
 
-            if (Data.Name == null) { 
-                throw new Exception("Nombre no puede ser null");
+                if (Data.LastName == null)
+                {
+                    throw new Exception("Apellido no puede ser null");
+                }
+
+                _updateCrewMember.Name = Data.Name;
+                _updateCrewMember.LastName = Data.LastName;
+                _updateCrewMember.Password = Data.Password;
+                _updateCrewMember.CheckAndEncryptPassword();
+                this.CrewMemberPersistence.AddOrUpdateCrewMember(_updateCrewMember);
             }
-
-            if (Data.LastName == null) {
-                 throw new Exception("Apellido no puede ser null");
+            catch (Exception E)
+            {
+                throw E;
             }
-
-            _updateCrewMember.Name = Data.Name;
-            _updateCrewMember.LastName = Data.LastName;
-            _updateCrewMember.Password = Data.Password;
-            _updateCrewMember.CheckAndEncryptPassword();
-            this.CrewMemberPersistence.AddOrUpdateCrewMember(_updateCrewMember);
         }
 
 

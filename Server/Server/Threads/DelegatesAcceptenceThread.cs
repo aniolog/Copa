@@ -16,22 +16,27 @@ namespace Server.Threads
 
         private Models.Context CurrentContext;
 
-        public DelegatesAcceptenceThread(Models.Request Request, Models.Context CurrentContext)
+        private Persistences.RequestPersistence RequestPersistence;
+
+        public DelegatesAcceptenceThread(Models.Request Request)
         {
-            this.CurrentContext = CurrentContext;
             this.Request = Request;
             Thread _acceptenceThread = new Thread(this.Start);
             _acceptenceThread.Start();
         }
 
         private void Start() {
-            System.Threading.Thread.Sleep(45 * 60 * 1000);
+           System.Threading.Thread.Sleep(45 * 60 * 1000);
+           this.CurrentContext = new Context();
+           this.RequestPersistence =
+                new Persistences.RequestPersistence(this.CurrentContext);
+           this.Request = this.RequestPersistence.FindById(this.Request.Id);
            if((!(this.Request.IsApproved))&&(this.Request.CancelDelegate==null)){
 
                this.Request.IsApproved = false;
                this.Request.CancelReason = 
                    Threads.ThreadResources.CancelationDueToInactivityEvent;
-               CurrentContext.SaveChanges();
+               this.RequestPersistence.AddOrUpdateRequest(this.Request);
 
 
                #region Web socket message to logistic delegate
@@ -52,7 +57,7 @@ namespace Server.Threads
                }
 
                _gcmPush.SendToUser
-                   (JsonObject.ServerEvent.TeamMemberCanceldByInactivity.ToString()
+                   (JsonObject.ServerEvent.TeamMemberCanceldByInactivity.ToString(),""
                    ,Request.Id.ToString(), false);
                #endregion
 
@@ -64,20 +69,24 @@ namespace Server.Threads
                    Pushs.PushFactory.GetPushService(_memberDevice.Type);
                _pushService.AddToken(_memberDevice.Token);
                String _title;
+               String _message;
 
                if (_memberDevice.Language == Device.DeviceLanguage.EN)
                {
-                   _title = Pushs.PushResources.DelegateInactivity_EN;
+                   _title = Pushs.PushResources.Notification_EN;
+                   _message = Pushs.PushResources.DelegateInactivityMessage_EN;
                }
                else if (_memberDevice.Language == Device.DeviceLanguage.ES)
                {
-                   _title = Pushs.PushResources.DelegateInactivity_ES;
+                   _title = Pushs.PushResources.Notification_ES;
+                   _message = Pushs.PushResources.DelegateInactivityMessage_ES;
                }
                else
                {
-                   _title = Pushs.PushResources.DelegateInactivity_BR;
+                   _title = Pushs.PushResources.Notification_BR;
+                   _message = Pushs.PushResources.DelegateInactivityMessage_BR;
                }
-               _pushService.SendToUser(_title,Request.Id.ToString(),_memberDevice.Type);
+               _pushService.SendToUser(_title,_message,Request.Id.ToString(),_memberDevice.Type);
                #endregion
 
 

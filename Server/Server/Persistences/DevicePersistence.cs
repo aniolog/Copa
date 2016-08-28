@@ -26,7 +26,7 @@ namespace Server.Persistences
             }
             catch(System.InvalidOperationException)
             {
-                throw new Exceptions.DeviceNotFoundException();
+                return null;
 
             }
         }

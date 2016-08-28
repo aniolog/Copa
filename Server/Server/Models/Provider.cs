@@ -40,16 +40,16 @@ namespace Server.Models
         /// 
         /// </summary>
         [Required]
-        public string Address { set; get; }
+        public virtual string Address { set; get; }
         /// <summary>
         /// 
         /// </summary>
-        public ICollection<Vehicle> Vehicles { set; get; }
+        public virtual ICollection<Vehicle> Vehicles { set; get; }
 
         /// <summary>
         /// 
         /// </summary>
-        public ICollection<Request> Requests { set; get; }
+        public virtual ICollection<Request> Requests { set; get; }
 
 
         /// <summary>

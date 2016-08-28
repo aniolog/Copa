@@ -117,49 +117,58 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="DelegateAcceptedRequest_BR" xml:space="preserve">
-    <value />
+  <data name="DelegateAcceptedRequestMessage_BR" xml:space="preserve">
+    <value>4</value>
   </data>
-  <data name="DelegateAcceptedRequest_EN" xml:space="preserve">
-    <value />
+  <data name="DelegateAcceptedRequestMessage_EN" xml:space="preserve">
+    <value>5</value>
   </data>
-  <data name="DelegateAcceptedRequest_ES" xml:space="preserve">
-    <value />
+  <data name="DelegateAcceptedRequestMessage_ES" xml:space="preserve">
+    <value>6</value>
   </data>
-  <data name="DelegateInactivity_BR" xml:space="preserve">
-    <value />
+  <data name="DelegateInactivityMessage_BR" xml:space="preserve">
+    <value>10</value>
   </data>
-  <data name="DelegateInactivity_EN" xml:space="preserve">
-    <value />
+  <data name="DelegateInactivityMessage_EN" xml:space="preserve">
+    <value>11</value>
   </data>
-  <data name="DelegateInactivity_ES" xml:space="preserve">
-    <value />
+  <data name="DelegateInactivityMessage_ES" xml:space="preserve">
+    <value>12</value>
   </data>
-  <data name="DelegateRegisterNewRequest_BR" xml:space="preserve">
-    <value />
+  <data name="DelegateRegisterNewRequestMessage_BR" xml:space="preserve">
+    <value>16</value>
   </data>
-  <data name="DelegateRegisterNewRequest_EN" xml:space="preserve">
-    <value />
+  <data name="DelegateRegisterNewRequestMessage_EN" xml:space="preserve">
+    <value>17</value>
   </data>
-  <data name="DelegateRegisterNewRequest_ES" xml:space="preserve">
-    <value />
+  <data name="DelegateRegisterNewRequestMessage_ES" xml:space="preserve">
+    <value>18</value>
   </data>
-  <data name="DelegateRejectedRequest_BR" xml:space="preserve">
-    <value />
+  <data name="DelegateRejectedRequestMessage_BR" xml:space="preserve">
+    <value>22</value>
   </data>
-  <data name="DelegateRejectedRequest_EN" xml:space="preserve">
-    <value />
+  <data name="DelegateRejectedRequestMessage_EN" xml:space="preserve">
+    <value>23</value>
   </data>
-  <data name="DelegateRejectedRequest_ES" xml:space="preserve">
-    <value />
+  <data name="DelegateRejectedRequestMessage_ES" xml:space="preserve">
+    <value>24</value>
   </data>
-  <data name="TeamMemberInactivity_BR" xml:space="preserve">
-    <value />
+  <data name="Notification_BR" xml:space="preserve">
+    <value>Nova notificação !</value>
   </data>
-  <data name="TeamMemberInactivity_EN" xml:space="preserve">
-    <value />
+  <data name="Notification_EN" xml:space="preserve">
+    <value>New notification!</value>
   </data>
-  <data name="TeamMemberInactivity_ES" xml:space="preserve">
-    <value />
+  <data name="Notification_ES" xml:space="preserve">
+    <value>Nueva notificacion!</value>
+  </data>
+  <data name="TeamMemberInactivityMessage_BR" xml:space="preserve">
+    <value>28</value>
+  </data>
+  <data name="TeamMemberInactivityMessage_EN" xml:space="preserve">
+    <value>29</value>
+  </data>
+  <data name="TeamMemberInactivityMessage_ES" xml:space="preserve">
+    <value>30</value>
   </data>
 </root>

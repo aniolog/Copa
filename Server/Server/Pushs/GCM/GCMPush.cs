@@ -87,17 +87,20 @@ namespace Server.Pushs.GCM
             this.Broker.Start();
         }
 
-        public override void Send(string Message)
+        public override void Send(String Title, String Message, String Data)
         {
+            String _message = "{\"title\" : \"{0}\" ,\"message\" : \"{1}\", \"data\" : \"{2}\"}";
+            _message = _message.Replace("{0}", Title);
+            _message = _message.Replace("{1}", Message);
+            _message = _message.Replace("{2}", Data);
+
             this.Broker.QueueNotification(new GcmNotification
             {
 
-                RegistrationIds = this.Tokens,
-                Data = JObject.Parse(Message)
-
+               RegistrationIds = this.Tokens,
+               Data = JObject.Parse(_message)
 
             });
-            this.Broker.Stop();
         }
 
         // "fPumEGyIg_0:APA91bHp9KxqB_dYS4GaG-xW9wOmmpBXxuwFsA_FM1MT2w2vLEekPMU-KlvR0UYs9xm8-Z0SZIOvLbnNzMaHxHi7ZNpVWi9xQINqLd5nOP-0HSEcT9kZuFpn9XID28mAELR3lEK7ck4H"

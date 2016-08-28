@@ -31,32 +31,14 @@ namespace Server.Models
         [Required] 
         public float Long { set; get; }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        public ICollection<TeamMember> TeamMembers { set; get; }
 
         /// <summary>
         /// 
         /// </summary>
-        [Required] 
-        public CrewMember CrewMember { set; get; }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        public ICollection<Request> Requests { set; get; }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        public Place()
-        {
-            this.TeamMembers = new HashSet<TeamMember>();
-            this.Requests = new HashSet<Request>();
+        [Required]
+        public virtual CrewMember CrewMember { set; get; }
 
 
-        }
         
     }
 }

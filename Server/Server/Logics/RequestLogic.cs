@@ -29,6 +29,8 @@ namespace Server.Logics
             this.ProviderPersistence =
                 new Persistences.ProviderPersistence(this.CurrentContext);
 
+           
+
         }
 
    
@@ -70,28 +72,31 @@ namespace Server.Logics
 
                 foreach (TeamMember _threadTeamMember in _savedRequest.Team)
                 {
-                    new Threads.CrewMemberAcceptenceThread(_threadTeamMember, this.CurrentContext);
+                    new Threads.CrewMemberAcceptenceThread(_threadTeamMember);
                     #region Push notification to CrewMember
                     Models.Device _memberDevice = _threadTeamMember.Member.Device;
                     Pushs.Push _pushService =
                         Pushs.PushFactory.GetPushService(_memberDevice.Type);
                     _pushService.AddToken(_memberDevice.Token);
                     String _title;
-
+                    String _message;
                     if (_memberDevice.Language == Device.DeviceLanguage.EN)
                     {
-                        _title = Pushs.PushResources.DelegateRegisterNewRequest_EN;
+                        _title = Pushs.PushResources.Notification_EN;
+                        _message = Pushs.PushResources.DelegateRegisterNewRequestMessage_EN;
                     }
                     else if (_memberDevice.Language == Device.DeviceLanguage.ES)
                     {
-                        _title = Pushs.PushResources.DelegateRegisterNewRequest_ES;
+                        _title = Pushs.PushResources.Notification_ES;
+                        _message = Pushs.PushResources.DelegateRegisterNewRequestMessage_ES;
                     }
                     else
                     {
-                        _title = Pushs.PushResources.DelegateRegisterNewRequest_BR;
+                        _title = Pushs.PushResources.Notification_BR;
+                        _message = Pushs.PushResources.DelegateRegisterNewRequestMessage_BR;
                     }
 
-                    _pushService.SendToUser(_title, JsonConvert.SerializeObject(_savedRequest),
+                    _pushService.SendToUser(_title, JsonConvert.SerializeObject(_savedRequest),_message,
                         _memberDevice.Type);
                     #endregion
                 }
@@ -127,21 +132,25 @@ namespace Server.Logics
                     Pushs.PushFactory.GetPushService(_memberDevice.Type);
                 _pushService.AddToken(_memberDevice.Token);
                 String _title;
+                String _message;
 
                 if (_memberDevice.Language == Device.DeviceLanguage.EN)
                 {
-                    _title = Pushs.PushResources.DelegateAcceptedRequest_EN;
+                    _title = Pushs.PushResources.Notification_EN;
+                    _message = Pushs.PushResources.DelegateAcceptedRequestMessage_EN;
                 }
                 else if (_memberDevice.Language == Device.DeviceLanguage.ES)
                 {
-                    _title = Pushs.PushResources.DelegateAcceptedRequest_ES;
+                    _title = Pushs.PushResources.Notification_ES;
+                    _message = Pushs.PushResources.DelegateAcceptedRequestMessage_ES;
                 }
                 else
                 {
-                    _title = Pushs.PushResources.DelegateAcceptedRequest_BR;
+                    _title = Pushs.PushResources.Notification_BR;
+                    _message = Pushs.PushResources.DelegateAcceptedRequestMessage_BR;
                 }
 
-                _pushService.SendToUser(_title, _request.Team.First().Id.ToString()
+                _pushService.SendToUser(_title, _request.Team.First().Id.ToString(),_message
                     , _memberDevice.Type);
                 #endregion
 
@@ -160,7 +169,7 @@ namespace Server.Logics
                     _gcmPush.AddToken(_delegateGcm.Device.Token);
                 }
                 _gcmPush.SendToUser
-                    (JsonObject.ServerEvent.DelegateAcceptedRequest.ToString()
+                    (JsonObject.ServerEvent.DelegateAcceptedRequest.ToString(),""
                     , _request.Id.ToString(), false);
                 #endregion
             }
@@ -195,21 +204,24 @@ namespace Server.Logics
                     Pushs.PushFactory.GetPushService(_memberDevice.Type);
                 _pushService.AddToken(_memberDevice.Token);
                 String _title;
-
+                String _message;
                 if (_memberDevice.Language == Device.DeviceLanguage.EN)
                 {
-                    _title = Pushs.PushResources.DelegateRejectedRequest_EN;
+                    _title = Pushs.PushResources.Notification_EN;
+                    _message = Pushs.PushResources.DelegateRejectedRequestMessage_EN;
                 }
                 else if (_memberDevice.Language == Device.DeviceLanguage.ES)
                 {
-                    _title = Pushs.PushResources.DelegateRejectedRequest_ES;
+                    _title = Pushs.PushResources.Notification_ES;
+                    _message = Pushs.PushResources.DelegateRejectedRequestMessage_ES;
                 }
                 else
                 {
-                    _title = Pushs.PushResources.DelegateRejectedRequest_BR;
+                    _title = Pushs.PushResources.Notification_BR;
+                    _message = Pushs.PushResources.DelegateRejectedRequestMessage_BR;
                 }
 
-                _pushService.SendToUser(_title, _request.Team.First().Id.ToString()
+                _pushService.SendToUser(_title, _message,_request.Id.ToString()
                     , _memberDevice.Type);
                 #endregion
 
@@ -223,13 +235,16 @@ namespace Server.Logics
 
                 #region Gcm Push message to logistics delegates
                 Pushs.Push _gcmPush = Pushs.PushFactory.GetGcmPushSender();
-                foreach (LogisticsDelegate _delegateGcm in CurrentContext.LogisticDelegates)
+                foreach (LogisticsDelegate _notifcationDelegate in CurrentContext.LogisticDelegates)
                 {
-                    _gcmPush.AddToken(_delegateGcm.Device.Token);
+                    if (_delegate.Device != null)
+                    {
+                        _gcmPush.AddToken(_notifcationDelegate.Device.Token);
+                    }
                 }
                 _gcmPush.SendToUser
-                    (JsonObject.ServerEvent.DelegateRejectedRequest.ToString()
-                    , _request.Id.ToString(), false);
+                    (JsonObject.ServerEvent.DelegateRejectedRequest.ToString(),
+                    "", _crewMember.Id.ToString(), false);
                 #endregion
 
             }
@@ -274,32 +289,37 @@ namespace Server.Logics
                 NewRequest.IsApproved = false;
                 Models.Request _savedRequest =
                     this.RequestPersistence.AddOrUpdateRequest(NewRequest);
-                new Threads.DelegatesAcceptenceThread(_savedRequest, this.CurrentContext);
+                new Threads.DelegatesAcceptenceThread(_savedRequest);
 
                 #region Web socket message to logistic delegate
                 JsonObject _jsonMessage = new JsonObject();
                 _jsonMessage.Event = JsonObject.ServerEvent.CrewMemberRegistedRequest;
-                _jsonMessage.TriggerBy = _crewMember.Id.ToString();
-                _jsonMessage.Data = JsonConvert.SerializeObject(NewRequest);
-                WebSockets.List.LogisticsWebSocketList.BroadCast(JsonConvert.SerializeObject(_jsonMessage));
+                _jsonMessage.TriggerBy =_teamMember.Member.Name+" "+_teamMember.Member.LastName;
+                _jsonMessage.Data = _savedRequest.Id.ToString();
+                WebSockets.List.LogisticsWebSocketList.GetInstance();
+                 WebSockets.List.LogisticsWebSocketList
+                     .BroadCast(JsonConvert.SerializeObject(_jsonMessage));
                 #endregion
 
                 #region Gcm Push message to logistics delegates
                 Pushs.Push _gcmPush = Pushs.PushFactory.GetGcmPushSender();
                 foreach (LogisticsDelegate _delegate in CurrentContext.LogisticDelegates)
                 {
-                    _gcmPush.AddToken(_delegate.Device.Token);
+                    if (_delegate.Device != null)
+                    {
+                        _gcmPush.AddToken(_delegate.Device.Token);
+                    }
                 }
                 _gcmPush.SendToUser
-                    (JsonObject.ServerEvent.CrewMemberRegistedRequest.ToString()
-                    , _crewMember.Id.ToString(), false);
+                    (JsonObject.ServerEvent.CrewMemberRegistedRequest.ToString(),
+                    "", _crewMember.Id.ToString(), false);
                 #endregion
             }
             catch (Exceptions.CrewMemberNotFoundException E)
             {
                 throw E;
             }
-            catch (Exception E)
+            catch (System.Data.Entity.Core.EntityCommandExecutionException E)
             {
                 throw E;
             }
@@ -350,7 +370,7 @@ namespace Server.Logics
                     _gcmPush.AddToken(_delegate.Device.Token);
                 }
                 _gcmPush.SendToUser
-                    (JsonObject.ServerEvent.CrewMemberAcceptedRequest.ToString()
+                    (JsonObject.ServerEvent.CrewMemberAcceptedRequest.ToString(),""
                     , _teamMember.Id.ToString(), false);
                 #endregion
 
@@ -409,8 +429,8 @@ namespace Server.Logics
                     _gcmPush.AddToken(_delegate.Device.Token);
                 }
                 _gcmPush.SendToUser
-                    (JsonObject.ServerEvent.CrewMemberRejectedRequest.ToString()
-                    , _teamMember.Id.ToString(), false);
+                    (JsonObject.ServerEvent.CrewMemberRejectedRequest.ToString(),
+                    "", _teamMember.Id.ToString(), false);
                 #endregion
             }
             catch (Exceptions.CrewMemberNotFoundException E)
@@ -475,7 +495,7 @@ namespace Server.Logics
                     _gcmPush.AddToken(_delegate.Device.Token);
                 }
                 _gcmPush.SendToUser
-                    (JsonObject.ServerEvent.CrewMemberModifiedRequest.ToString()
+                    (JsonObject.ServerEvent.CrewMemberModifiedRequest.ToString(),""
                     , _teamMember.Id.ToString(), false);
                 #endregion
             }catch (Exceptions.CrewMemberNotFoundException E)

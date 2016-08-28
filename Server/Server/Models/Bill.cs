@@ -36,13 +36,13 @@ namespace Server.Models
         /// <summary>
         /// 
         /// </summary>
-        public Rate Rate { set; get; }
+        public virtual Rate Rate { set; get; }
 
         /// <summary>
         /// 
         /// </summary>
-        [Required] 
-        public Provider Provider { set; get; }
+        [Required]
+        public virtual Provider Provider { set; get; }
 
 
 

@@ -27,6 +27,7 @@ namespace Server.Models
         [Required] 
         public Boolean Type{set; get;}
 
+
         /// <summary>
         /// 
         /// </summary>

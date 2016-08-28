@@ -28,7 +28,7 @@ namespace Server.Models
         /// <summary>
         /// 
         /// </summary>
-        public ICollection<Rate> Rates { set; get; }
+        public virtual ICollection<Rate> Rates { set; get; }
 
         /// <summary>
         /// 

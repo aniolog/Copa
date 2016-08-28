@@ -233,7 +233,6 @@
     <Compile Include="Models\Currency.cs" />
     <Compile Include="Models\Device.cs" />
     <Compile Include="Models\LogisticsDelegate.cs" />
-    <Compile Include="Models\Model\DataBase.cs" />
     <Compile Include="Models\Place.cs" />
     <Compile Include="Models\Provider.cs" />
     <Compile Include="Models\Rate.cs" />

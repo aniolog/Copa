@@ -35,14 +35,14 @@ namespace Server.Models
         /// <summary>
         /// 
         /// </summary>
-        public ICollection<TeamMember> TeamMembers { get; set; }
+        public virtual ICollection<TeamMember> TeamMembers { get; set; }
 
        
 
         /// <summary>
         /// 
         /// </summary>
-        public ICollection<Place> Places { get; set; }
+        public virtual ICollection<Place> Places { get; set; }
 
 
         public CrewMember():base()

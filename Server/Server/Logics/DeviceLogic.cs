@@ -25,10 +25,6 @@ namespace Server.Logics
                 CrewMember _crewMember = this.CrewMemberPersistence.FindById(CrewMemberId);
                 this.AddDeviceToUser(_crewMember, Device);
             }
-            catch (Exceptions.CrewMemberNotFoundException E)
-            {
-                throw E;
-            }
             catch (Exception E)
             {
                 throw E;
