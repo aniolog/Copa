@@ -113,7 +113,7 @@ namespace Server.Logics
             {
                 Models.Request _request = this.RequestPersistence.FindById(RequestId);
 
-                if (_request.IsApproved == false)
+                if ((_request.IsApproved == false)&&(_request.CancelReason!=null))
                 {
                     throw new Exception("Request has been cancel");
                 }
@@ -150,7 +150,7 @@ namespace Server.Logics
                     _message = Pushs.PushResources.DelegateAcceptedRequestMessage_BR;
                 }
 
-                _pushService.SendToUser(_title, _request.Team.First().Id.ToString(),_message
+                _pushService.SendToUser(_title, _message, _request.Team.First().Id.ToString()
                     , _memberDevice.Type);
                 #endregion
 
@@ -180,21 +180,35 @@ namespace Server.Logics
 
         }
 
-   
-        public void DelegateRejectRequest(long RequestId, long DelegateId)
+        /// <summary>
+        /// This method allows each delegate to reject a crew member register request
+        /// if the request has been confirmed before the method will trow an exception
+        /// the same behavior is preset if the request has been canceld before.
+        /// once the request has been rejected the server will send the proper notification
+        /// to the crew member and each logistic delegate.
+        /// </summary>
+        /// <param name="RequestId"></param>
+        /// <param name="DelegateId"></param>
+        public void DelegateRejectRequest(long RequestId, long DelegateId,String CancelReason)
         {
             try
             {
+                
                 Models.Request _request = this.RequestPersistence.FindById(RequestId);
                 if (_request.IsApproved == true)
                 {
                     throw new Exception("Request has been accepted");
                 }
+                if((_request.CancelReason!=null)&&(_request.IsApproved==false)){
+                    throw new Exception("Request has been canceld");
+                }
+
                 Models.LogisticsDelegate _delegate =
                     this.LogisteDelegatePersistence.FindById(DelegateId);
                 _request.CancelDelegate = _delegate;
                 _request.ApproveDelegate = null;
                 _request.IsApproved = false;
+                _request.CancelReason = CancelReason;
                 this.RequestPersistence.AddOrUpdateRequest(_request);
 
                 #region Push notification to CrewMember
@@ -255,7 +269,18 @@ namespace Server.Logics
 
          }
 
-      
+        /// <summary>
+        /// This method allows each crew member to register a new request
+        /// the request need to fullfill the follow requeriments:
+        /// -The datetime of the requests neeed to be at least an hour after
+        /// the registration time
+        /// -Need to have a suitable team, this means that the team needs to have 
+        /// at least a crew member.
+        /// Once the request have been stored in the database the server will 
+        /// send the proper notifications to each logistic delegates
+        /// </summary>
+        /// <param name="CrewMemberId"></param>
+        /// <param name="NewRequest"></param>
         public void CrewMemberRegisterRequest(long CrewMemberId, Models.Request NewRequest)
         {
             try

@@ -82,13 +82,13 @@ namespace Server.Controllers
 
 
         [Authorize(Roles = "logisticdelegate")]
-        [Route("logisticdelegate/{RequestId}")]
+        [Route("logisticdelegate/{RequestId}/{CancelReason}")]
         [HttpDelete]
-        public void LogisticDelegateCancelRequest([FromUri] long RequestId)
+        public void LogisticDelegateCancelRequest([FromUri] long RequestId,[FromUri] String CancelReason)
         {
             long Id = long.Parse(RequestContext.Principal.Identity.Name);
             Logics.RequestLogic _logic = new Logics.RequestLogic();
-            _logic.DelegateRejectRequest(RequestId, Id);
+            _logic.DelegateRejectRequest(RequestId, Id, CancelReason);
 
         }
 

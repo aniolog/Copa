@@ -26,7 +26,7 @@ namespace Server.Threads
         }
 
         private void Start() {
-           System.Threading.Thread.Sleep(45 * 60 * 1000);
+           System.Threading.Thread.Sleep(1 * 60 * 1000);
            this.CurrentContext = new Context();
            this.RequestPersistence =
                 new Persistences.RequestPersistence(this.CurrentContext);
