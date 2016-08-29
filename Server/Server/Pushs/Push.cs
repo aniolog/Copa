@@ -20,7 +20,7 @@ namespace Server.Pushs
       
 
          
-                this.Send(Title,Message,Data);
+                //this.Send(Title,Message,Data);
               
         
         

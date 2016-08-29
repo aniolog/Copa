@@ -42,17 +42,20 @@ namespace Server.Controllers
         [HttpGet]
         public void CrewMemberAcceptedRequest([FromUri] long TeamMemberId)
         {
-            var dos = 1 + 1;
-
+            long Id = long.Parse(RequestContext.Principal.Identity.Name);
+            Logics.RequestLogic _logic = new Logics.RequestLogic();
+            _logic.CrewMemberAcceptRequest(TeamMemberId, Id);
 
         }
 
         [Authorize(Roles = "crewmember")]
-        [Route("crewmember/{TeamMemberId}")]
+        [Route("crewmember/{TeamMemberId}/{CancelReason}")]
         [HttpDelete]
-        public void CrewMemberCancelRequest([FromUri] long TeamMemberId)
+        public void CrewMemberCancelRequest([FromUri] long TeamMemberId,[FromUri] String CancelReason)
         {
-            var dos = 1 + 1;
+            long Id = long.Parse(RequestContext.Principal.Identity.Name);
+            Logics.RequestLogic _logic = new Logics.RequestLogic();
+            _logic.CrewMemberRejectRequest(TeamMemberId, Id, CancelReason);
 
         }
 

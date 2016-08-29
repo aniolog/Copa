@@ -96,7 +96,7 @@ namespace Server.Logics
                         _message = Pushs.PushResources.DelegateRegisterNewRequestMessage_BR;
                     }
 
-                    _pushService.SendToUser(_title, JsonConvert.SerializeObject(_savedRequest),_message,
+                    _pushService.SendToUser(_title, _message, _threadTeamMember.Id.ToString(),
                         _memberDevice.Type);
                     #endregion
                 }
@@ -107,7 +107,16 @@ namespace Server.Logics
             }
         }
 
-       
+        /// <summary>
+        /// This method allows each delegate to accept a crew member registerd request
+        /// if the request has been rejected before the method will trow an exception
+        /// the same behavior is preset if the request has been canceld before.
+        /// once the request has been rejected the server will send the proper notification
+        /// to the crew member and each logistic delegate.
+        /// </summary>
+        /// <param name="RequestId"></param>
+        /// <param name="DelegateId"></param>
+        /// <param name="ProviderId"></param>
         public void DelegateAcceptRequest(long RequestId,long DelegateId,long ProviderId) {
             try
             {
@@ -359,6 +368,8 @@ namespace Server.Logics
 
                 Models.CrewMember _crewMember = this.CrewMemberPersistence.FindById(CrewMemberId);
 
+                Models.Request _request = this.RequestPersistence.FindById(_teamMember.Request.Id);
+
                 if (_crewMember == null)
                 {
                     throw new Exceptions.CrewMemberNotFoundException();
@@ -366,9 +377,9 @@ namespace Server.Logics
 
                 if (_crewMember.Id == _teamMember.Id)
                 {
-                    throw new Exception("Request does not belong to crew member");
+                    throw new Exception("Request does not belongs to crew member");
                 }
-                if (_teamMember != null)
+                if (_teamMember.CancelationReason != null)
                 {
                     if (_teamMember.IsAccepted == false)
                     {
@@ -378,12 +389,14 @@ namespace Server.Logics
                 }
 
                 _teamMember.IsAccepted = true;
+                _teamMember.Member = _crewMember;
+                _teamMember.Request = _request;
                 this.TeamMemberPersistence.AddOrUpdateRequest(_teamMember);
 
                 #region Web socket message to logistic delegate
                 JsonObject _jsonMessage = new JsonObject();
                 _jsonMessage.Event = JsonObject.ServerEvent.CrewMemberAcceptedRequest;
-                _jsonMessage.TriggerBy = _crewMember.Id.ToString();
+                _jsonMessage.TriggerBy = _crewMember.Name + " " + _crewMember.LastName;
                 _jsonMessage.Data = _teamMember.Id.ToString();
                 WebSockets.List.LogisticsWebSocketList.BroadCast(JsonConvert.SerializeObject(_jsonMessage));
                 #endregion
@@ -410,14 +423,16 @@ namespace Server.Logics
             }
         }
 
-        
-        public void CrewMemberRejectRequest(long TeamMemberId, long CrewMemberId)
+
+        public void CrewMemberRejectRequest(long TeamMemberId, long CrewMemberId, String CancelReason)
         {
             try
             {
                 Models.TeamMember _teamMember = this.TeamMemberPersistence.FindById(TeamMemberId);
 
                 Models.CrewMember _crewMember = this.CrewMemberPersistence.FindById(CrewMemberId);
+
+                Models.Request _request = this.RequestPersistence.FindById(_teamMember.Request.Id);
 
                 if (_crewMember == null)
                 {
@@ -437,13 +452,16 @@ namespace Server.Logics
                 }
 
                 _teamMember.IsAccepted = false;
+                _teamMember.CancelationReason = CancelReason;
+                _teamMember.Member = _crewMember;
+                _teamMember.Request = _request;
                 this.TeamMemberPersistence.AddOrUpdateRequest(_teamMember);
 
                 #region Web socket message to logistic delegate
                 JsonObject _jsonMessage = new JsonObject();
                 _jsonMessage.Event = JsonObject.ServerEvent.CrewMemberRejectedRequest;
-                _jsonMessage.TriggerBy = _crewMember.Id.ToString();
-                _jsonMessage.Data = _teamMember.Id.ToString();
+                _jsonMessage.TriggerBy = _crewMember.Name + " " + _crewMember.LastName; ;
+                _jsonMessage.Data = _teamMember.CancelationReason;
                 WebSockets.List.LogisticsWebSocketList.BroadCast(JsonConvert.SerializeObject(_jsonMessage));
                 #endregion
 
@@ -479,6 +497,8 @@ namespace Server.Logics
 
                 Models.CrewMember _crewMember = this.CrewMemberPersistence.FindById(CrewMemberId);
 
+                Models.Request _request = this.RequestPersistence.FindById(_teamMember.Request.Id);
+
                 if (_crewMember == null)
                 {
                     throw new Exceptions.CrewMemberNotFoundException();
@@ -488,7 +508,7 @@ namespace Server.Logics
                 {
                     throw new Exception("Request does not belong to crew member");
                 }
-                if (_teamMember.Request.RequestDate > DateTime.Now.AddMinutes(15))
+                if (!(DateTime.Now.AddMinutes(15) < _teamMember.Request.RequestDate))
                 {
                     throw new Exception("Request change time lapse has expired");
                 }
@@ -503,12 +523,14 @@ namespace Server.Logics
 
                 _teamMember.Lat = ModifiedTeamMember.Lat;
                 _teamMember.Long = ModifiedTeamMember.Long;
+                _teamMember.Member = _crewMember;
+                _teamMember.Request = _request;
                 this.TeamMemberPersistence.AddOrUpdateRequest(_teamMember);
 
                 #region Web socket message to logistic delegate
                 JsonObject _jsonMessage = new JsonObject();
                 _jsonMessage.Event = JsonObject.ServerEvent.CrewMemberModifiedRequest;
-                _jsonMessage.TriggerBy = _crewMember.Id.ToString();
+                _jsonMessage.TriggerBy = _crewMember.Name+" "+_crewMember.LastName;
                 _jsonMessage.Data = _teamMember.Id.ToString();
                 WebSockets.List.LogisticsWebSocketList.BroadCast(JsonConvert.SerializeObject(_jsonMessage));
                 #endregion
