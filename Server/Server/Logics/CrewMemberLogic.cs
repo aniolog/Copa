@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Server.Exceptions;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
@@ -16,12 +17,22 @@ namespace Server.Logics
                 new Persistences.CrewMemberPersistence(this.CurrentContext);
         }
 
+        public Models.CrewMember GetCrewMember(long CrewMemberId)
+        {
+            return this.CrewMemberPersistence.FindById(CrewMemberId);
+        }
+
+
         public void AddCrewMember(Models.CrewMember NewCrewMember) {
             try
             {
                 if (CrewMemberPersistence.FindCrewMemberByEmail(NewCrewMember.Email) != null)
                 {
-                    throw new Exceptions.EmailAlreadyInUse();
+                    throw new Exceptions.EmailAlreadyInUseException();
+                }
+                if ((String.IsNullOrEmpty(NewCrewMember.Name)) || 
+                    (String.IsNullOrEmpty(NewCrewMember.LastName))) { 
+                    throw new Exceptions.InvalidUserDataException();
                 }
                 NewCrewMember.CheckAndEncryptPassword();
                 NewCrewMember.CheckEmail();
@@ -113,18 +124,27 @@ namespace Server.Logics
                      this.CrewMemberPersistence.FindById(id);
                 if (Data.Name == null)
                 {
-                    throw new Exception("Nombre no puede ser null");
+                    throw new InvalidUserDataException();
                 }
 
                 if (Data.LastName == null)
                 {
-                    throw new Exception("Apellido no puede ser null");
+                    throw new InvalidUserDataException();
                 }
 
                 _updateCrewMember.Name = Data.Name;
                 _updateCrewMember.LastName = Data.LastName;
-                _updateCrewMember.Password = Data.Password;
-                _updateCrewMember.CheckAndEncryptPassword();
+                if (Data.Email != _updateCrewMember.Email)
+                {
+                    Models.CrewMember _emailSelected =
+                        this.CrewMemberPersistence.FindCrewMemberByEmail(Data.Email);
+                    if (_emailSelected != null)
+                    {
+                        throw new EmailAlreadyInUseException();
+                    }
+                    _updateCrewMember.Email = Data.Email;
+                    _updateCrewMember.CheckEmail();
+                }
                 this.CrewMemberPersistence.AddOrUpdateCrewMember(_updateCrewMember);
             }
             catch (Exception E)

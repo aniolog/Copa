@@ -24,6 +24,7 @@ namespace Server.Controllers
         // POST api/bills
         public void Post([FromBody]string value)
         {
+            var s = 5 + 1;
         }
 
         // PUT api/bills/5

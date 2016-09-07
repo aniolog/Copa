@@ -9,7 +9,7 @@ using System.Web.Http;
 
 namespace Server.Controllers
 {
-    [Authorize(Roles="crewmember")]
+    //[Authorize(Roles="crewmember")]
     [RoutePrefix("api/places")]
     public class PlacesController : ApiController
     {
@@ -27,11 +27,11 @@ namespace Server.Controllers
         // POST api/places
         [Route("")]
         [HttpPost]
-        public void Post([FromBody]Place value)
+        public Models.Place Post([FromBody]Place value)
         {
             int Id = int.Parse(RequestContext.Principal.Identity.Name);
             PlaceLogic _logic = new PlaceLogic();
-            _logic.AddPlace(Id,value);
+            return _logic.AddPlace(Id,value);
         }
 
         // PUT api/places/1

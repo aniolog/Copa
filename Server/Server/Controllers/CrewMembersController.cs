@@ -12,22 +12,18 @@ namespace Server.Controllers
     [RoutePrefix("api/crewmembers")]
     public class CrewMembersController : ApiController
     {
+        
         // GET api/crewmembers
         [HttpGet]
         [Route("")]
-        public IEnumerable<string> Get()
+        public Models.CrewMember Get()
         {
-            return new string[] { "value1", "value2" };
+            int Id = int.Parse(RequestContext.Principal.Identity.Name);
+            Logics.CrewMemberLogic _logic = new Logics.CrewMemberLogic();
+            return _logic.GetCrewMember(Id);
         }
-
-        // GET api/crewmembers/5
-        [HttpGet]
-        [Route("{id}")]
-        public string Get(int id)
-        {
-            return "value";
-        }
-
+        
+    
         // POST api/crewmembers
         [AllowAnonymous]
         [HttpPost]
@@ -61,12 +57,12 @@ namespace Server.Controllers
 
         // GET api/crewmembers/resetpassword/aniolog@gmail.com
         [AllowAnonymous]
-        [Route("resetpassword/{Email}")]
-        [HttpGet]
-        public void RequestResetPassword([FromUri] String Email)
+        [Route("resetpassword")]
+        [HttpPost]
+        public void RequestResetPassword([FromBody] Models.User Email)
         {
             Logics.CrewMemberLogic _logic = new Logics.CrewMemberLogic();
-            _logic.RequestResetPassword(Email);
+            _logic.RequestResetPassword(Email.Email);
         }
 
         // POST api/crewmembers/resetPassword/

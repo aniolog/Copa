@@ -94,24 +94,14 @@ namespace Server.Persistences
         public Models.CrewMember AddOrUpdateCrewMember(Models.CrewMember CrewMember) {
             if (CrewMember.Id == 0)
             {
-                try
-                {
+                
                     CurrentContext.CrewMembers.Add(CrewMember);
                     CurrentContext.SaveChanges();
                     CurrentContext.Entry(CrewMember).GetDatabaseValues();
-                }
-                catch (Exception E) { 
-                
-                }
+           
             }
             else {
-                try
-                {
                     CurrentContext.SaveChanges();
-                }
-                catch (Exception E) {
-                    return null;
-                }
             }
             return CrewMember;
         

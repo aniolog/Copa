@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -35,6 +36,7 @@ namespace Server.Models
         /// <summary>
         /// 
         /// </summary>
+       [JsonIgnore]
         public virtual ICollection<TeamMember> TeamMembers { get; set; }
 
        
@@ -42,6 +44,7 @@ namespace Server.Models
         /// <summary>
         /// 
         /// </summary>
+        [JsonIgnore]
         public virtual ICollection<Place> Places { get; set; }
 
 

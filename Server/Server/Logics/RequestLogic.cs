@@ -41,11 +41,11 @@ namespace Server.Logics
 
                 if (NewRequest.RequestDate < DateTime.Now.AddHours(1))
                 {
-                    throw new Exception("Invalid Date");
+                    throw new Exceptions.InvalidDateException();
                 }
                 if (NewRequest.Team.Any() == false)
                 {
-                    throw new Exception("No suitable team");
+                    throw new Exceptions.NoSuitableTeamException();
                 }
 
                 foreach (TeamMember _teamMember in NewRequest.Team)
@@ -298,11 +298,11 @@ namespace Server.Logics
 
                 if (NewRequest.RequestDate < DateTime.Now.AddHours(1))
                 {
-                    throw new Exception("Invalid Date");
+                    throw new Exceptions.InvalidDateException();
                 }
                 if (NewRequest.Team.Any() == false)
                 {
-                    throw new Exception("No suitable team");
+                    throw new Exceptions.NoSuitableTeamException();
                 }
 
                 Models.CrewMember _crewMember =
@@ -360,6 +360,11 @@ namespace Server.Logics
         }
 
  
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="TeamMemberId"></param>
+        /// <param name="CrewMemberId"></param>
         public void CrewMemberAcceptRequest(long TeamMemberId ,long CrewMemberId)
         {
             try
@@ -423,7 +428,12 @@ namespace Server.Logics
             }
         }
 
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="TeamMemberId"></param>
+        /// <param name="CrewMemberId"></param>
+        /// <param name="CancelReason"></param>
         public void CrewMemberRejectRequest(long TeamMemberId, long CrewMemberId, String CancelReason)
         {
             try
@@ -487,7 +497,12 @@ namespace Server.Logics
            
         }
 
-       
+       /// <summary>
+       /// 
+       /// </summary>
+       /// <param name="TeamMemberId"></param>
+       /// <param name="CrewMemberId"></param>
+       /// <param name="ModifiedTeamMember"></param>
         public void CrewMemberModifyRequest
             (long TeamMemberId, long CrewMemberId,TeamMember ModifiedTeamMember)
         {
@@ -556,5 +571,52 @@ namespace Server.Logics
         
         }
 
+
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="CrewMemberId"></param>
+        /// <returns></returns>
+        public List<Models.Request> FindPendignTeamMember(long CrewMemberId)
+        {
+
+            CrewMember _selectedCrewMember = this.CrewMemberPersistence.FindById(CrewMemberId);
+            return this.RequestPersistence.GetPendingTeamMemberRequest(_selectedCrewMember).ToList(); 
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        public List<Models.Request> FindPendingRequest() {
+            return this.RequestPersistence.GetPendingRequest().ToList(); 
+        }
+
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="CrewMemberId"></param>
+        /// <returns></returns>
+        public List<Models.Request> FindNextTeamMember(long CrewMemberId)
+        {
+
+            CrewMember _selectedCrewMember = this.CrewMemberPersistence.FindById(CrewMemberId);
+            return this.RequestPersistence.GetTeamMemberNextRequests(_selectedCrewMember);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        public List<Models.Request> FindNextRequest()
+        {
+            return this.RequestPersistence.GetNextRequests().ToList();
+        }
+    
+    
+    
+    
     }
 }

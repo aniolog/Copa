@@ -16,12 +16,18 @@ namespace Server.Persistences
         }
 
 
-        public void UpdateOrAddPlace(Place NewPlace,CrewMember Member) {
+        public Models.Place UpdateOrAddPlace(Place NewPlace,CrewMember Member) {
+
+
             if (NewPlace.Id == 0)
             {
                 Member.Places.Add(NewPlace);
+                CurrentContext.SaveChanges();
+               CurrentContext.Entry(NewPlace).GetDatabaseValues();
+               return NewPlace;
             }
                 CurrentContext.SaveChanges();
+                return NewPlace;
        
 
         }

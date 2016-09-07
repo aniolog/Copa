@@ -174,33 +174,32 @@
     <Compile Include="Controllers\ProvidersController.cs" />
     <Compile Include="Controllers\RatesController.cs" />
     <Compile Include="Controllers\RequestsController.cs" />
+    <Compile Include="Controllers\TeamMemberController.cs" />
     <Compile Include="Controllers\VehiclesController.cs" />
     <Compile Include="Exceptions\CrewMemberNotFoundException.cs" />
     <Compile Include="Exceptions\DeviceNotFoundException.cs" />
-    <Compile Include="Exceptions\EmailAlreadyInUse.cs" />
+    <Compile Include="Exceptions\EmailAlreadyInUseException.cs" />
+    <Compile Include="Exceptions\EmailInUseException.cs" />
+    <Compile Include="Exceptions\InvalidDateException.cs" />
     <Compile Include="Exceptions\InvalidEmailException.cs" />
     <Compile Include="Exceptions\InvalidPasswordException.cs" />
     <Compile Include="Exceptions\InvalidTokenException.cs" />
+    <Compile Include="Exceptions\InvalidUserDataException.cs" />
     <Compile Include="Exceptions\LogisticDelegateNotFoundException.cs" />
+    <Compile Include="Exceptions\NoSuitableTeamException.cs" />
     <Compile Include="Exceptions\PlaceNotFoundException.cs" />
     <Compile Include="Exceptions\ProviderNotFoundException.cs" />
     <Compile Include="Exceptions\RequestNotFoundException.cs" />
     <Compile Include="Exceptions\RestorePasswordRequstHasExpiredException.cs" />
     <Compile Include="Exceptions\TeamMemberNotFoundException.cs" />
-    <Compile Include="Filters\CrewMemberAcceptedRequest.cs" />
-    <Compile Include="Filters\CrewMemberModifiedRequest.cs" />
-    <Compile Include="Filters\CrewMemberRegisterRequest.cs" />
-    <Compile Include="Filters\CrewMemberRejectedRequest.cs" />
-    <Compile Include="Filters\DelegateModifiedRequest.cs" />
-    <Compile Include="Filters\DelegateRegisterRequest.cs" />
-    <Compile Include="Filters\DelegateRejectedRequest.cs" />
+    <Compile Include="Filters\ExceptionFilter.cs" />
     <Compile Include="Filters\FilterResources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>FilterResources.resx</DependentUpon>
     </Compile>
-    <Compile Include="Filters\DelegateAceptedRequest.cs" />
     <Compile Include="Logics\RequestLogic.cs" />
+    <Compile Include="Logics\TeamMemberLogic.cs" />
     <Compile Include="Persistences\BasePersistence.cs" />
     <Compile Include="Persistences\RequestPersistence.cs" />
     <Compile Include="Persistences\TeamMemberPersistence.cs" />

@@ -23,7 +23,7 @@ namespace Server.Logics
             if (LogisticDelegatePersistence
                 .FindLogisticsDelegateByEmail(NewLogisticsDelegate.Email) != null)
             {
-                throw new Exceptions.EmailAlreadyInUse();
+                throw new Exceptions.EmailAlreadyInUseException();
             }
             NewLogisticsDelegate.CheckEmail();
             NewLogisticsDelegate.CheckAndEncryptPassword();

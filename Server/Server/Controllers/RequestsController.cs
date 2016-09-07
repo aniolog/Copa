@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Server.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
@@ -11,6 +12,49 @@ namespace Server.Controllers
     [RoutePrefix("api/requets")]
     public class RequestsController : ApiController
     {
+
+        [Route("")]
+        [HttpGet]
+        public List<Request> GetPendingRequest()
+        {
+
+            Logics.RequestLogic _logic = new Logics.RequestLogic();
+
+
+            if (RequestContext.Principal.IsInRole("crewmember"))
+            {
+                long Id = long.Parse(RequestContext.Principal.Identity.Name);
+                return _logic.FindNextTeamMember(Id);
+            }
+            else
+            {
+                return _logic.FindNextRequest();
+            }
+
+        }
+
+
+        [Route("pending")]
+        [HttpGet]
+        public List<Request> GetPendingRequest()
+        {
+           
+            Logics.RequestLogic _logic = new Logics.RequestLogic();
+
+
+            if (RequestContext.Principal.IsInRole("crewmember"))
+            {
+                long Id = long.Parse(RequestContext.Principal.Identity.Name);
+                return _logic.FindPendignTeamMember(Id);
+            }
+            else 
+            {
+                return _logic.FindPendingRequest();
+            }
+
+        }
+
+
 
 
         [Authorize(Roles = "crewmember")]

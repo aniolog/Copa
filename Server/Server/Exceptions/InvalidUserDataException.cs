@@ -5,7 +5,7 @@ using System.Web;
 
 namespace Server.Exceptions
 {
-    public class EmailAlreadyInUse:Exception
+    public class InvalidUserDataException:Exception
     {
     }
 }

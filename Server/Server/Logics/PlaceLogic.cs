@@ -18,7 +18,7 @@ namespace Server.Logics
             this.MemberPersistence = new CrewMemberPersistence(this.CurrentContext);
         }
 
-        public void AddPlace(int MemberId, Place NewPlace) {
+        public Models.Place AddPlace(int MemberId, Place NewPlace) {
             try
             {
                 CrewMember _currentMember = this.MemberPersistence.FindById(MemberId);
@@ -27,7 +27,7 @@ namespace Server.Logics
                 {
                     throw new Exception("Invalid place name");
                 }
-                this.PlacePersistence.UpdateOrAddPlace(NewPlace, _currentMember);
+               return this.PlacePersistence.UpdateOrAddPlace(NewPlace, _currentMember);
             }
             catch (Exceptions.CrewMemberNotFoundException E)
             {
@@ -80,12 +80,13 @@ namespace Server.Logics
         public List<Models.Place> FindPlaces(int MemberId) {
             try
             {
+                this.CurrentContext.Configuration.ProxyCreationEnabled = false;
                 CrewMember _currentMember = this.MemberPersistence.FindById(MemberId);
-                return _currentMember.Places.ToList();
-            }
-            catch (Exceptions.CrewMemberNotFoundException E)
-            {
-                throw E;
+                this.CurrentContext.Entry(_currentMember)
+                    .Collection(_crewMember => _crewMember.Places).Load();
+                return (_currentMember.Places.Any()) ? 
+                    _currentMember.Places.ToList() : null;
+              
             }
             catch (Exception E)
             {

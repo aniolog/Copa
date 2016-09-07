@@ -21,6 +21,7 @@ namespace Server.App_Start
             try
             {
                 context.OwinContext.Response.Headers.Add("Access-Control-Allow-Origin", new[] { "*" });
+                context.OwinContext.Response.Headers.Add("Access-Control-Allow-Headers", new[] { "*" });
 
                 Models.Context _currentContext = new Models.Context();
                 Persistences.CrewMemberPersistence _persistence
