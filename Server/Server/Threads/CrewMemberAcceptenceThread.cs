@@ -83,7 +83,7 @@ namespace Server.Threads
                       this.TeamMember.Request = 
                           this.RequestPersistence.FindById(this.TeamMember.Request.Id);
 
-                    this.TeamMemberPersitence.AddOrUpdateRequest(this.TeamMember);
+                    this.TeamMemberPersitence.AddOrUpdateTeamMember(this.TeamMember);
                     
 
                     #region Web socket message to logistic delegate

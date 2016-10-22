@@ -7,15 +7,18 @@ using System.Web.Http;
 
 namespace Server.Controllers
 {
-    [Route("api/teammembers")]
+    [RoutePrefix("api/teammembers")]
     [Authorize]
     public class TeamMemberController : ApiController
     {
-       
-        // GET api/teammember/5
-        public string Get(int id)
+
+        [Authorize(Roles = "crewmember")]
+        [HttpPut]
+        [Route("{Id}")]
+        public void Put([FromUri] int Id,[FromBody]Models.TeamMember value)
         {
-            return "value";
+            Logics.TeamMemberLogic _logic = new Logics.TeamMemberLogic();
+            _logic.UpdateTeamMember(Id, value);
         }
 
 

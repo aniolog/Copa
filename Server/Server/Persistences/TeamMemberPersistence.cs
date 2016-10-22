@@ -30,21 +30,28 @@ namespace Server.Persistences
             }
         }
 
-        public Models.TeamMember AddOrUpdateRequest(Models.TeamMember TeamMember)
+        public Models.TeamMember AddOrUpdateTeamMember(Models.TeamMember TeamMember)
         {
-            if (TeamMember.Id == 0)
+            try
             {
-                CurrentContext.TeamMembers.Add(TeamMember);
-                CurrentContext.SaveChanges();
-                CurrentContext.Entry(TeamMember).GetDatabaseValues();
-            }
-            else
-            {
-                CurrentContext.SaveChanges();
+                if (TeamMember.Id == 0)
+                {
+                    CurrentContext.TeamMembers.Add(TeamMember);
+                    CurrentContext.SaveChanges();
+                    CurrentContext.Entry(TeamMember).GetDatabaseValues();
+                }
+                else
+                {
+                    CurrentContext.SaveChanges();
 
 
+                }
+                return TeamMember;
             }
-            return TeamMember;
+            catch (System.Data.Entity.Validation.DbEntityValidationException E)
+            {
+                throw E;
+            }
 
         }
     }

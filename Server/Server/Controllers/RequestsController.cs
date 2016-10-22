@@ -15,7 +15,7 @@ namespace Server.Controllers
 
         [Route("")]
         [HttpGet]
-        public List<Request> GetPendingRequest()
+        public List<Request> GetNextRequest()
         {
 
             Logics.RequestLogic _logic = new Logics.RequestLogic();

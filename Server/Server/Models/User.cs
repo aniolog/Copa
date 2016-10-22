@@ -223,7 +223,7 @@ namespace Server.Models
             else {
                 this.ResetPasswordId = null;
                 this.ResetPasswordLimit = null;
-                throw new Exceptions.RestorePasswordRequstHasExpiredException();
+                throw new Exceptions.RestorePasswordRequestHasExpiredException();
             }
 
         }

@@ -5,7 +5,7 @@ using System.Web;
 
 namespace Server.Exceptions
 {
-    public class RestorePasswordRequstHasExpiredException: Exception
+    public class RequestHasExpiredException:Exception
     {
     }
 }

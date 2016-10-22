@@ -189,8 +189,9 @@
     <Compile Include="Exceptions\NoSuitableTeamException.cs" />
     <Compile Include="Exceptions\PlaceNotFoundException.cs" />
     <Compile Include="Exceptions\ProviderNotFoundException.cs" />
+    <Compile Include="Exceptions\RequestHasExpiredException.cs" />
     <Compile Include="Exceptions\RequestNotFoundException.cs" />
-    <Compile Include="Exceptions\RestorePasswordRequstHasExpiredException.cs" />
+    <Compile Include="Exceptions\RestorePasswordRequestHasExpiredException.cs" />
     <Compile Include="Exceptions\TeamMemberNotFoundException.cs" />
     <Compile Include="Filters\ExceptionFilter.cs" />
     <Compile Include="Filters\FilterResources.Designer.cs">

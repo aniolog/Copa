@@ -28,12 +28,18 @@ namespace Server.Logics
                 new Persistences.TeamMemberPersistence(this.CurrentContext);
             this.ProviderPersistence =
                 new Persistences.ProviderPersistence(this.CurrentContext);
-
-           
-
         }
 
    
+        /// <summary>
+        /// This method allows each delegate to register a request
+        /// Once the request has passed all the validation 
+        /// the request will be stored in the database
+        /// and then the server will send the notification to each team members
+        /// in the request
+        /// </summary>
+        /// <param name="DelegateId"></param>
+        /// <param name="NewRequest"></param>
         public void DelegateRegisterRequest(int DelegateId,Models.Request NewRequest){
             try
             {
@@ -62,7 +68,7 @@ namespace Server.Logics
 
                 Models.LogisticsDelegate _delegate =
                     this.LogisteDelegatePersistence.FindById(DelegateId);
-
+                NewRequest.IsApproved = true;
                 NewRequest.RegisterDelegate = _delegate;
                 NewRequest.ApproveDelegate = _delegate;
                 NewRequest.Provider =
@@ -74,30 +80,30 @@ namespace Server.Logics
                 {
                     new Threads.CrewMemberAcceptenceThread(_threadTeamMember);
                     #region Push notification to CrewMember
-                    Models.Device _memberDevice = _threadTeamMember.Member.Device;
-                    Pushs.Push _pushService =
-                        Pushs.PushFactory.GetPushService(_memberDevice.Type);
-                    _pushService.AddToken(_memberDevice.Token);
-                    String _title;
-                    String _message;
-                    if (_memberDevice.Language == Device.DeviceLanguage.EN)
-                    {
-                        _title = Pushs.PushResources.Notification_EN;
-                        _message = Pushs.PushResources.DelegateRegisterNewRequestMessage_EN;
-                    }
-                    else if (_memberDevice.Language == Device.DeviceLanguage.ES)
-                    {
-                        _title = Pushs.PushResources.Notification_ES;
-                        _message = Pushs.PushResources.DelegateRegisterNewRequestMessage_ES;
-                    }
-                    else
-                    {
-                        _title = Pushs.PushResources.Notification_BR;
-                        _message = Pushs.PushResources.DelegateRegisterNewRequestMessage_BR;
-                    }
+                        Models.Device _memberDevice = _threadTeamMember.Member.Device;
+                        Pushs.Push _pushService =
+                            Pushs.PushFactory.GetPushService(_memberDevice.Type);
+                        _pushService.AddToken(_memberDevice.Token);
+                        String _title;
+                        String _message;
 
-                    _pushService.SendToUser(_title, _message, _threadTeamMember.Id.ToString(),
-                        _memberDevice.Type);
+                        if (_memberDevice.Language == Device.DeviceLanguage.EN)
+                        {
+                            _title = Pushs.PushResources.Notification_EN;
+                            _message = Pushs.PushResources.DelegateRegisterNewRequestMessage_EN;
+                        }
+                        else if (_memberDevice.Language == Device.DeviceLanguage.ES)
+                        {
+                            _title = Pushs.PushResources.Notification_ES;
+                            _message = Pushs.PushResources.DelegateRegisterNewRequestMessage_ES;
+                        }
+                        else
+                        {
+                            _title = Pushs.PushResources.Notification_BR;
+                            _message = Pushs.PushResources.DelegateRegisterNewRequestMessage_BR;
+                        }
+                        String _serializedRequest = Newtonsoft.Json.JsonConvert.SerializeObject(NewRequest);
+                        _pushService.SendToUser(_title, _message, _serializedRequest, _memberDevice.Type);
                     #endregion
                 }
             }
@@ -159,8 +165,8 @@ namespace Server.Logics
                     _message = Pushs.PushResources.DelegateAcceptedRequestMessage_BR;
                 }
 
-                _pushService.SendToUser(_title, _message, _request.Team.First().Id.ToString()
-                    , _memberDevice.Type);
+                String _serializedRequest = Newtonsoft.Json.JsonConvert.SerializeObject(_request);
+                _pushService.SendToUser(_title, _message,_serializedRequest, _memberDevice.Type);
                 #endregion
 
                 #region Web socket message to logistic delegate
@@ -244,8 +250,8 @@ namespace Server.Logics
                     _message = Pushs.PushResources.DelegateRejectedRequestMessage_BR;
                 }
 
-                _pushService.SendToUser(_title, _message,_request.Id.ToString()
-                    , _memberDevice.Type);
+                String _serializedRequest = Newtonsoft.Json.JsonConvert.SerializeObject(_request);
+                _pushService.SendToUser(_title, _message,_serializedRequest, _memberDevice.Type);
                 #endregion
 
                 #region Web socket message to logistic delegate
@@ -361,7 +367,8 @@ namespace Server.Logics
 
  
         /// <summary>
-        /// 
+        /// This method allows each crew member accept each request that he is involve to
+        /// by a logistic delegate
         /// </summary>
         /// <param name="TeamMemberId"></param>
         /// <param name="CrewMemberId"></param>
@@ -396,7 +403,7 @@ namespace Server.Logics
                 _teamMember.IsAccepted = true;
                 _teamMember.Member = _crewMember;
                 _teamMember.Request = _request;
-                this.TeamMemberPersistence.AddOrUpdateRequest(_teamMember);
+                this.TeamMemberPersistence.AddOrUpdateTeamMember(_teamMember);
 
                 #region Web socket message to logistic delegate
                 JsonObject _jsonMessage = new JsonObject();
@@ -429,7 +436,8 @@ namespace Server.Logics
         }
 
         /// <summary>
-        /// 
+        /// This method allows each crew member reject each request that he is involve to
+        /// by a logistic delegate 
         /// </summary>
         /// <param name="TeamMemberId"></param>
         /// <param name="CrewMemberId"></param>
@@ -465,7 +473,7 @@ namespace Server.Logics
                 _teamMember.CancelationReason = CancelReason;
                 _teamMember.Member = _crewMember;
                 _teamMember.Request = _request;
-                this.TeamMemberPersistence.AddOrUpdateRequest(_teamMember);
+                this.TeamMemberPersistence.AddOrUpdateTeamMember(_teamMember);
 
                 #region Web socket message to logistic delegate
                 JsonObject _jsonMessage = new JsonObject();
@@ -540,7 +548,7 @@ namespace Server.Logics
                 _teamMember.Long = ModifiedTeamMember.Long;
                 _teamMember.Member = _crewMember;
                 _teamMember.Request = _request;
-                this.TeamMemberPersistence.AddOrUpdateRequest(_teamMember);
+                this.TeamMemberPersistence.AddOrUpdateTeamMember(_teamMember);
 
                 #region Web socket message to logistic delegate
                 JsonObject _jsonMessage = new JsonObject();
@@ -582,7 +590,9 @@ namespace Server.Logics
         {
 
             CrewMember _selectedCrewMember = this.CrewMemberPersistence.FindById(CrewMemberId);
-            return this.RequestPersistence.GetPendingTeamMemberRequest(_selectedCrewMember).ToList(); 
+            IQueryable<Request> SelectedRequest= 
+                this.RequestPersistence.GetPendingTeamMemberRequest(_selectedCrewMember);
+            return (SelectedRequest!=null) ? SelectedRequest.ToList() : new List<Request>();
         }
 
         /// <summary>

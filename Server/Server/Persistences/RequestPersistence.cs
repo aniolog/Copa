@@ -55,7 +55,8 @@ namespace Server.Persistences
             IQueryable<Request> _pendingRequest = from _pendingTeamMember 
                                                   in this.CurrentContext.TeamMembers
                                                   where _pendingTeamMember.Member.Id == PendingCrewMember.Id &&
-                                                        _pendingTeamMember.IsAccepted == null
+                                                        _pendingTeamMember.IsAccepted == null &&
+                                                        _pendingTeamMember.Request.IsApproved==true
                                                   select _pendingTeamMember.Request;
 
             return (_pendingRequest.Any())?_pendingRequest:null;
